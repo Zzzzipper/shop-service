@@ -7,5 +7,10 @@ RUN cd /src/merchant-service/cmd && go build -o /app
 # Production stage
 FROM scratch
 COPY --from=build-env /app /
-ENV POSTGRES_URL=postgresql://postgres:password@172.17.0.2:5432/merchant?sslmode=disable
+ARG DB_USER
+ARG DB_PASSWORD
+ARG DB_HOST
+ARG DB_PORT
+ARG DB_NAME
+ENV POSTGRES_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
 ENTRYPOINT ["/app"]

@@ -115,10 +115,3 @@ type Terminal struct {
 	// Url
 	Url string
 }
-
-type User struct {
-	ID         pgtype.UUID
-	Role       Role
-	CreateTime time.Time
-	Name       string
-}
