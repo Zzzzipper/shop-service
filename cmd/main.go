@@ -21,11 +21,7 @@ import (
 
 const defaultPort = "8080"
 
-<<<<<<< HEAD
-// version:  0.2.0
-=======
 // version: 0.2.0
->>>>>>> fbac5ab... version: 0.2.0
 func main() {
 	log := logrus.New()
 	log.Formatter = &logrus.JSONFormatter{}
