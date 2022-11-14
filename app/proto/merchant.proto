@@ -1,0 +1,82 @@
+syntax="proto3";
+
+package merchant;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "merchant-service/proto;merchant";
+
+service MerchantService {
+    rpc AddPartner(AddPartnerRequest) returns (Partner) {}
+    rpc DeletePartner(DeletePartnerRequest) returns (Partner) {}
+    rpc ListPartners(ListPartnersRequest) returns (stream Partner) {}
+    rpc AddMerchant(AddMerchantRequest) returns (Merchant) {}
+    rpc DeleteMerchant(DeleteMerchantRequest) returns (Merchant) {}
+    rpc ListMerchants(ListMerchantsRequest) returns (stream Merchant) {}
+}
+
+enum Role {
+    BASE_PARTNER = 0;
+    PARTNER = 1;
+    ADMIN = 2;
+    GUEST = 3;
+}
+
+message Partner {
+    string id = 1;
+	google.protobuf.Timestamp create_time = 2;
+	string full_name = 3;
+    string url = 4;
+	string api_token = 5; 
+	Role role = 6;
+}
+
+message Merchant {
+    string id = 1;
+    google.protobuf.Timestamp create_time = 2;
+    string full_name = 3;
+    string url = 4;
+    string partner_id = 5;
+}
+
+message PartnerRole {
+    Role role = 1;
+}
+
+message AddPartnerRequest {
+    string full_name = 1;
+    string url = 2;
+    Role role = 3;
+}
+
+message DeletePartnerRequest {
+    string id = 1;
+}
+
+message ListPartnersRequest {
+    // Only list partners created after this timestamp
+    google.protobuf.Timestamp created_since = 1;
+    // Only list partners older than this Duration
+    google.protobuf.Duration older_than = 2;
+}
+
+message AddMerchantRequest {
+    string full_name = 1;
+    string url = 2;
+    string partner_id = 3;
+}
+
+message DeleteMerchantRequest {
+    string id = 1;
+}
+
+message ListMerchantsRequest {
+    // Only list merchants created for partner with id
+    string partner_id = 1;
+    // Only list merchants created after this timestamp
+    google.protobuf.Timestamp created_since = 2;
+    // Only list merchants older than this Duration
+    google.protobuf.Duration older_than = 3;
+}

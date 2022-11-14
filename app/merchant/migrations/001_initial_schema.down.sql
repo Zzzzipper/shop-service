@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS partners CASCADE;
+DROP TYPE role;
