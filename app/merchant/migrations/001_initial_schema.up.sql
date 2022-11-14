@@ -144,7 +144,7 @@ ALTER TABLE public.buyers OWNER TO postgres;
 -- DROP TABLE IF EXISTS public.schema_migrations CASCADE;
 CREATE TABLE public.schema_migrations (
 	version bigint NOT NULL,
-	dirty boolean NOT NULL,
+	dirty boolean NOT NULL DEFAULT false,
 	CONSTRAINT schema_migrations_pkey PRIMARY KEY (version)
 );
 -- ddl-end --
