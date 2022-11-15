@@ -26,9 +26,16 @@ func main() {
 	log := logrus.New()
 	log.Formatter = &logrus.JSONFormatter{}
 
+	var err error
 	pgURL := os.Getenv("POSTGRES_URL")
 	if pgURL == "" {
-		log.Fatal("POSTGRES_URL must be set")
+		pgURL, err = merchant.CreateURL_FromEnvParts()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		if pgURL == "" {
+			log.Fatal("POSTGRES_URL must be set")
+		}
 	}
 	parsedURL, err := url.Parse(pgURL)
 	if err != nil {

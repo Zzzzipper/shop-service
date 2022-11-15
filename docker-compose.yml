@@ -2,14 +2,13 @@ version: '3'
 services:
   app:
     container_name: merchant-service_app
-    build:
-      context: .
-      args:
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
-        - DB_HOST=${DB_HOST}
-        - DB_PORT=${DB_PORT}
-        - DB_NAME=${DB_NAME}
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+    build: .
     ports:
       - 8080:8080
     restart: on-failure

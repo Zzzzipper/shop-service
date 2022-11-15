@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"io"
+	"os"
 
 	migrate "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database"
@@ -166,4 +167,44 @@ func (p *partnersSource) Err() error {
 		return nil
 	}
 	return p.err
+}
+
+const defaultPgDriver = "postgres"
+const defaultPgPort = "5432"
+
+func CreateURL_FromEnvParts() (string, error) {
+	var pgUrl string = ""
+	pgHost := os.Getenv("DB_HOST")
+	if pgHost == "" {
+		return "", fmt.Errorf("Postgres host must be set")
+	}
+	pgDriver := os.Getenv("DB_DRIVER")
+	if pgDriver == "" {
+		pgDriver = defaultPgDriver
+	}
+	pgUser := os.Getenv("DB_USER")
+	if pgUser == "" {
+		return "", fmt.Errorf("Postgres user must be set")
+	}
+	pgPassword := os.Getenv("DB_PASSWORD")
+	if pgPassword == "" {
+		return "", fmt.Errorf("Postgres password must be set")
+	}
+	pgDbName := os.Getenv("DB_NAME")
+	if pgDbName == "" {
+		return "", fmt.Errorf("Postgres database name must be set")
+	}
+	pgPort := os.Getenv("DB_PORT")
+	if pgPort == "" {
+		pgPort = defaultPgPort
+	}
+	pgUrl = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+		pgUser,
+		pgPassword,
+		pgHost,
+		pgPort,
+		pgDbName,
+	)
+
+	return pgUrl, nil
 }
