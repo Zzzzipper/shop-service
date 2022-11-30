@@ -4,7 +4,6 @@ package merchant;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/empty.proto";
 
 option go_package = "merchant-service/proto;merchant";
 
