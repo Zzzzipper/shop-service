@@ -9,10 +9,12 @@ import (
 	"google.golang.org/grpc/status"
 
 	merchpb "merchant-service/proto"
+
+	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
 
 // AddMerchant adds a merchant to the directory.
-func (d Directory) AddMerchant(ctx context.Context, req *merchpb.AddMerchantRequest) (*merchpb.Merchant, error) {
+func (d Directory) AddMerchant(ctx context.Context, req *api.AddMerchantRequest) (*api.Merchant, error) {
 	var partnerID pgtype.UUID
 	err := partnerID.Set(req.GetPartnerId())
 	if err != nil {
@@ -30,7 +32,7 @@ func (d Directory) AddMerchant(ctx context.Context, req *merchpb.AddMerchantRequ
 }
 
 // DeleteMerchant deletes the merchant, if found.
-func (d Directory) DeleteMerchant(ctx context.Context, req *merchpb.DeleteMerchantRequest) (*merchpb.Merchant, error) {
+func (d Directory) DeleteMerchant(ctx context.Context, req *api.DeleteMerchantRequest) (*api.Merchant, error) {
 	var merchantID pgtype.UUID
 	err := merchantID.Set(req.GetId())
 	if err != nil {
@@ -44,7 +46,7 @@ func (d Directory) DeleteMerchant(ctx context.Context, req *merchpb.DeleteMercha
 }
 
 // ListPartners lists partners in the directory, subject to the request filters.
-func (d Directory) ListMerchants(req *merchpb.ListMerchantsRequest, srv merchpb.MerchantService_ListMerchantsServer) (retErr error) {
+func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.MerchantService_ListMerchantsServer) (retErr error) {
 	q := d.sb.Select(
 		"id",
 		"create_time",

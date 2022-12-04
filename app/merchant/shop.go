@@ -9,10 +9,12 @@ import (
 	"google.golang.org/grpc/status"
 
 	merchpb "merchant-service/proto"
+
+	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
 
 // AddShop adds a shop to the directory.
-func (d Directory) AddShop(ctx context.Context, req *merchpb.AddShopRequest) (*merchpb.Shop, error) {
+func (d Directory) AddShop(ctx context.Context, req *api.AddShopRequest) (*api.Shop, error) {
 	var merchantID pgtype.UUID
 	err := merchantID.Set(req.GetMerchantId())
 	if err != nil {
@@ -32,7 +34,7 @@ func (d Directory) AddShop(ctx context.Context, req *merchpb.AddShopRequest) (*m
 }
 
 // DeleteShop deletes the shop, if found.
-func (d Directory) DeleteShop(ctx context.Context, req *merchpb.DeleteShopRequest) (*merchpb.Shop, error) {
+func (d Directory) DeleteShop(ctx context.Context, req *api.DeleteShopRequest) (*api.Shop, error) {
 	var shopID pgtype.UUID
 	err := shopID.Set(req.GetId())
 	if err != nil {
@@ -46,7 +48,7 @@ func (d Directory) DeleteShop(ctx context.Context, req *merchpb.DeleteShopReques
 }
 
 // ListPartners lists shops in the directory, subject to the request filters.
-func (d Directory) ListShops(req *merchpb.ListShopsRequest, srv merchpb.MerchantService_ListShopsServer) (retErr error) {
+func (d Directory) ListShops(req *api.ListShopsRequest, srv merchpb.MerchantService_ListShopsServer) (retErr error) {
 	q := d.sb.Select(
 		"id",
 		"create_time",

@@ -12,7 +12,7 @@
   ],
   "paths": {},
   "definitions": {
-    "merchantMerchant": {
+    "apiMerchant": {
       "type": "object",
       "properties": {
         "id": {
@@ -33,7 +33,7 @@
         }
       }
     },
-    "merchantPartner": {
+    "apiPartner": {
       "type": "object",
       "properties": {
         "id": {
@@ -53,11 +53,11 @@
           "type": "string"
         },
         "role": {
-          "$ref": "#/definitions/merchantRole"
+          "$ref": "#/definitions/apiRole"
         }
       }
     },
-    "merchantRole": {
+    "apiRole": {
       "type": "string",
       "enum": [
         "BASE_PARTNER",
@@ -65,29 +65,30 @@
         "ADMIN",
         "GUEST"
       ],
-      "default": "BASE_PARTNER"
+      "default": "BASE_PARTNER",
+      "title": "Partners"
     },
-    "merchantSellerInfo": {
+    "apiSellerInfo": {
       "type": "object",
       "properties": {
         "Status": {
           "type": "boolean"
         },
         "TerminalInfo": {
-          "$ref": "#/definitions/merchantTerminal"
+          "$ref": "#/definitions/apiTerminal"
         },
         "ShopInfo": {
-          "$ref": "#/definitions/merchantShop"
+          "$ref": "#/definitions/apiShop"
         },
         "MerchantInfo": {
-          "$ref": "#/definitions/merchantMerchant"
+          "$ref": "#/definitions/apiMerchant"
         },
         "PartnerInfo": {
-          "$ref": "#/definitions/merchantPartner"
+          "$ref": "#/definitions/apiPartner"
         }
       }
     },
-    "merchantShop": {
+    "apiShop": {
       "type": "object",
       "properties": {
         "id": {
@@ -114,7 +115,7 @@
         }
       }
     },
-    "merchantTerminal": {
+    "apiTerminal": {
       "type": "object",
       "properties": {
         "id": {

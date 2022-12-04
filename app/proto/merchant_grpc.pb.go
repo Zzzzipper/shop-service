@@ -8,6 +8,7 @@ package merchant
 
 import (
 	context "context"
+	api "gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,19 +23,19 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MerchantServiceClient interface {
-	AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*Partner, error)
-	DeletePartner(ctx context.Context, in *DeletePartnerRequest, opts ...grpc.CallOption) (*Partner, error)
-	ListPartners(ctx context.Context, in *ListPartnersRequest, opts ...grpc.CallOption) (MerchantService_ListPartnersClient, error)
-	AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*Merchant, error)
-	DeleteMerchant(ctx context.Context, in *DeleteMerchantRequest, opts ...grpc.CallOption) (*Merchant, error)
-	ListMerchants(ctx context.Context, in *ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error)
-	AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error)
-	DeleteShop(ctx context.Context, in *DeleteShopRequest, opts ...grpc.CallOption) (*Shop, error)
-	ListShops(ctx context.Context, in *ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error)
-	AddTerminal(ctx context.Context, in *AddTerminalRequest, opts ...grpc.CallOption) (*Terminal, error)
-	DeleteTerminal(ctx context.Context, in *DeleteTerminalRequest, opts ...grpc.CallOption) (*Terminal, error)
-	ListTerminals(ctx context.Context, in *ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error)
-	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*SellerInfo, error)
+	AddPartner(ctx context.Context, in *api.AddPartnerRequest, opts ...grpc.CallOption) (*api.Partner, error)
+	DeletePartner(ctx context.Context, in *api.DeletePartnerRequest, opts ...grpc.CallOption) (*api.Partner, error)
+	ListPartners(ctx context.Context, in *api.ListPartnersRequest, opts ...grpc.CallOption) (MerchantService_ListPartnersClient, error)
+	AddMerchant(ctx context.Context, in *api.AddMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error)
+	DeleteMerchant(ctx context.Context, in *api.DeleteMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error)
+	ListMerchants(ctx context.Context, in *api.ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error)
+	AddShop(ctx context.Context, in *api.AddShopRequest, opts ...grpc.CallOption) (*api.Shop, error)
+	DeleteShop(ctx context.Context, in *api.DeleteShopRequest, opts ...grpc.CallOption) (*api.Shop, error)
+	ListShops(ctx context.Context, in *api.ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error)
+	AddTerminal(ctx context.Context, in *api.AddTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error)
+	DeleteTerminal(ctx context.Context, in *api.DeleteTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error)
+	ListTerminals(ctx context.Context, in *api.ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error)
+	Auth(ctx context.Context, in *api.AuthRequest, opts ...grpc.CallOption) (*api.SellerInfo, error)
 }
 
 type merchantServiceClient struct {
@@ -45,8 +46,8 @@ func NewMerchantServiceClient(cc grpc.ClientConnInterface) MerchantServiceClient
 	return &merchantServiceClient{cc}
 }
 
-func (c *merchantServiceClient) AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*Partner, error) {
-	out := new(Partner)
+func (c *merchantServiceClient) AddPartner(ctx context.Context, in *api.AddPartnerRequest, opts ...grpc.CallOption) (*api.Partner, error) {
+	out := new(api.Partner)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddPartner", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -54,8 +55,8 @@ func (c *merchantServiceClient) AddPartner(ctx context.Context, in *AddPartnerRe
 	return out, nil
 }
 
-func (c *merchantServiceClient) DeletePartner(ctx context.Context, in *DeletePartnerRequest, opts ...grpc.CallOption) (*Partner, error) {
-	out := new(Partner)
+func (c *merchantServiceClient) DeletePartner(ctx context.Context, in *api.DeletePartnerRequest, opts ...grpc.CallOption) (*api.Partner, error) {
+	out := new(api.Partner)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeletePartner", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,7 +64,7 @@ func (c *merchantServiceClient) DeletePartner(ctx context.Context, in *DeletePar
 	return out, nil
 }
 
-func (c *merchantServiceClient) ListPartners(ctx context.Context, in *ListPartnersRequest, opts ...grpc.CallOption) (MerchantService_ListPartnersClient, error) {
+func (c *merchantServiceClient) ListPartners(ctx context.Context, in *api.ListPartnersRequest, opts ...grpc.CallOption) (MerchantService_ListPartnersClient, error) {
 	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[0], "/merchant.MerchantService/ListPartners", opts...)
 	if err != nil {
 		return nil, err
@@ -79,7 +80,7 @@ func (c *merchantServiceClient) ListPartners(ctx context.Context, in *ListPartne
 }
 
 type MerchantService_ListPartnersClient interface {
-	Recv() (*Partner, error)
+	Recv() (*api.Partner, error)
 	grpc.ClientStream
 }
 
@@ -87,16 +88,16 @@ type merchantServiceListPartnersClient struct {
 	grpc.ClientStream
 }
 
-func (x *merchantServiceListPartnersClient) Recv() (*Partner, error) {
-	m := new(Partner)
+func (x *merchantServiceListPartnersClient) Recv() (*api.Partner, error) {
+	m := new(api.Partner)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-func (c *merchantServiceClient) AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*Merchant, error) {
-	out := new(Merchant)
+func (c *merchantServiceClient) AddMerchant(ctx context.Context, in *api.AddMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error) {
+	out := new(api.Merchant)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddMerchant", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -104,8 +105,8 @@ func (c *merchantServiceClient) AddMerchant(ctx context.Context, in *AddMerchant
 	return out, nil
 }
 
-func (c *merchantServiceClient) DeleteMerchant(ctx context.Context, in *DeleteMerchantRequest, opts ...grpc.CallOption) (*Merchant, error) {
-	out := new(Merchant)
+func (c *merchantServiceClient) DeleteMerchant(ctx context.Context, in *api.DeleteMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error) {
+	out := new(api.Merchant)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteMerchant", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -113,7 +114,7 @@ func (c *merchantServiceClient) DeleteMerchant(ctx context.Context, in *DeleteMe
 	return out, nil
 }
 
-func (c *merchantServiceClient) ListMerchants(ctx context.Context, in *ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error) {
+func (c *merchantServiceClient) ListMerchants(ctx context.Context, in *api.ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error) {
 	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[1], "/merchant.MerchantService/ListMerchants", opts...)
 	if err != nil {
 		return nil, err
@@ -129,7 +130,7 @@ func (c *merchantServiceClient) ListMerchants(ctx context.Context, in *ListMerch
 }
 
 type MerchantService_ListMerchantsClient interface {
-	Recv() (*Merchant, error)
+	Recv() (*api.Merchant, error)
 	grpc.ClientStream
 }
 
@@ -137,16 +138,16 @@ type merchantServiceListMerchantsClient struct {
 	grpc.ClientStream
 }
 
-func (x *merchantServiceListMerchantsClient) Recv() (*Merchant, error) {
-	m := new(Merchant)
+func (x *merchantServiceListMerchantsClient) Recv() (*api.Merchant, error) {
+	m := new(api.Merchant)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-func (c *merchantServiceClient) AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error) {
-	out := new(Shop)
+func (c *merchantServiceClient) AddShop(ctx context.Context, in *api.AddShopRequest, opts ...grpc.CallOption) (*api.Shop, error) {
+	out := new(api.Shop)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddShop", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -154,8 +155,8 @@ func (c *merchantServiceClient) AddShop(ctx context.Context, in *AddShopRequest,
 	return out, nil
 }
 
-func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *DeleteShopRequest, opts ...grpc.CallOption) (*Shop, error) {
-	out := new(Shop)
+func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *api.DeleteShopRequest, opts ...grpc.CallOption) (*api.Shop, error) {
+	out := new(api.Shop)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteShop", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -163,7 +164,7 @@ func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *DeleteShopRe
 	return out, nil
 }
 
-func (c *merchantServiceClient) ListShops(ctx context.Context, in *ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error) {
+func (c *merchantServiceClient) ListShops(ctx context.Context, in *api.ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error) {
 	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[2], "/merchant.MerchantService/ListShops", opts...)
 	if err != nil {
 		return nil, err
@@ -179,7 +180,7 @@ func (c *merchantServiceClient) ListShops(ctx context.Context, in *ListShopsRequ
 }
 
 type MerchantService_ListShopsClient interface {
-	Recv() (*Shop, error)
+	Recv() (*api.Shop, error)
 	grpc.ClientStream
 }
 
@@ -187,16 +188,16 @@ type merchantServiceListShopsClient struct {
 	grpc.ClientStream
 }
 
-func (x *merchantServiceListShopsClient) Recv() (*Shop, error) {
-	m := new(Shop)
+func (x *merchantServiceListShopsClient) Recv() (*api.Shop, error) {
+	m := new(api.Shop)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *AddTerminalRequest, opts ...grpc.CallOption) (*Terminal, error) {
-	out := new(Terminal)
+func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *api.AddTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error) {
+	out := new(api.Terminal)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddTerminal", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -204,8 +205,8 @@ func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *AddTerminal
 	return out, nil
 }
 
-func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *DeleteTerminalRequest, opts ...grpc.CallOption) (*Terminal, error) {
-	out := new(Terminal)
+func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *api.DeleteTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error) {
+	out := new(api.Terminal)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteTerminal", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -213,7 +214,7 @@ func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *DeleteTe
 	return out, nil
 }
 
-func (c *merchantServiceClient) ListTerminals(ctx context.Context, in *ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error) {
+func (c *merchantServiceClient) ListTerminals(ctx context.Context, in *api.ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error) {
 	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[3], "/merchant.MerchantService/ListTerminals", opts...)
 	if err != nil {
 		return nil, err
@@ -229,7 +230,7 @@ func (c *merchantServiceClient) ListTerminals(ctx context.Context, in *ListTermi
 }
 
 type MerchantService_ListTerminalsClient interface {
-	Recv() (*Terminal, error)
+	Recv() (*api.Terminal, error)
 	grpc.ClientStream
 }
 
@@ -237,16 +238,16 @@ type merchantServiceListTerminalsClient struct {
 	grpc.ClientStream
 }
 
-func (x *merchantServiceListTerminalsClient) Recv() (*Terminal, error) {
-	m := new(Terminal)
+func (x *merchantServiceListTerminalsClient) Recv() (*api.Terminal, error) {
+	m := new(api.Terminal)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-func (c *merchantServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*SellerInfo, error) {
-	out := new(SellerInfo)
+func (c *merchantServiceClient) Auth(ctx context.Context, in *api.AuthRequest, opts ...grpc.CallOption) (*api.SellerInfo, error) {
+	out := new(api.SellerInfo)
 	err := c.cc.Invoke(ctx, "/merchant.MerchantService/Auth", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -258,62 +259,62 @@ func (c *merchantServiceClient) Auth(ctx context.Context, in *AuthRequest, opts 
 // All implementations should embed UnimplementedMerchantServiceServer
 // for forward compatibility
 type MerchantServiceServer interface {
-	AddPartner(context.Context, *AddPartnerRequest) (*Partner, error)
-	DeletePartner(context.Context, *DeletePartnerRequest) (*Partner, error)
-	ListPartners(*ListPartnersRequest, MerchantService_ListPartnersServer) error
-	AddMerchant(context.Context, *AddMerchantRequest) (*Merchant, error)
-	DeleteMerchant(context.Context, *DeleteMerchantRequest) (*Merchant, error)
-	ListMerchants(*ListMerchantsRequest, MerchantService_ListMerchantsServer) error
-	AddShop(context.Context, *AddShopRequest) (*Shop, error)
-	DeleteShop(context.Context, *DeleteShopRequest) (*Shop, error)
-	ListShops(*ListShopsRequest, MerchantService_ListShopsServer) error
-	AddTerminal(context.Context, *AddTerminalRequest) (*Terminal, error)
-	DeleteTerminal(context.Context, *DeleteTerminalRequest) (*Terminal, error)
-	ListTerminals(*ListTerminalsRequest, MerchantService_ListTerminalsServer) error
-	Auth(context.Context, *AuthRequest) (*SellerInfo, error)
+	AddPartner(context.Context, *api.AddPartnerRequest) (*api.Partner, error)
+	DeletePartner(context.Context, *api.DeletePartnerRequest) (*api.Partner, error)
+	ListPartners(*api.ListPartnersRequest, MerchantService_ListPartnersServer) error
+	AddMerchant(context.Context, *api.AddMerchantRequest) (*api.Merchant, error)
+	DeleteMerchant(context.Context, *api.DeleteMerchantRequest) (*api.Merchant, error)
+	ListMerchants(*api.ListMerchantsRequest, MerchantService_ListMerchantsServer) error
+	AddShop(context.Context, *api.AddShopRequest) (*api.Shop, error)
+	DeleteShop(context.Context, *api.DeleteShopRequest) (*api.Shop, error)
+	ListShops(*api.ListShopsRequest, MerchantService_ListShopsServer) error
+	AddTerminal(context.Context, *api.AddTerminalRequest) (*api.Terminal, error)
+	DeleteTerminal(context.Context, *api.DeleteTerminalRequest) (*api.Terminal, error)
+	ListTerminals(*api.ListTerminalsRequest, MerchantService_ListTerminalsServer) error
+	Auth(context.Context, *api.AuthRequest) (*api.SellerInfo, error)
 }
 
 // UnimplementedMerchantServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedMerchantServiceServer struct {
 }
 
-func (UnimplementedMerchantServiceServer) AddPartner(context.Context, *AddPartnerRequest) (*Partner, error) {
+func (UnimplementedMerchantServiceServer) AddPartner(context.Context, *api.AddPartnerRequest) (*api.Partner, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPartner not implemented")
 }
-func (UnimplementedMerchantServiceServer) DeletePartner(context.Context, *DeletePartnerRequest) (*Partner, error) {
+func (UnimplementedMerchantServiceServer) DeletePartner(context.Context, *api.DeletePartnerRequest) (*api.Partner, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePartner not implemented")
 }
-func (UnimplementedMerchantServiceServer) ListPartners(*ListPartnersRequest, MerchantService_ListPartnersServer) error {
+func (UnimplementedMerchantServiceServer) ListPartners(*api.ListPartnersRequest, MerchantService_ListPartnersServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListPartners not implemented")
 }
-func (UnimplementedMerchantServiceServer) AddMerchant(context.Context, *AddMerchantRequest) (*Merchant, error) {
+func (UnimplementedMerchantServiceServer) AddMerchant(context.Context, *api.AddMerchantRequest) (*api.Merchant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMerchant not implemented")
 }
-func (UnimplementedMerchantServiceServer) DeleteMerchant(context.Context, *DeleteMerchantRequest) (*Merchant, error) {
+func (UnimplementedMerchantServiceServer) DeleteMerchant(context.Context, *api.DeleteMerchantRequest) (*api.Merchant, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMerchant not implemented")
 }
-func (UnimplementedMerchantServiceServer) ListMerchants(*ListMerchantsRequest, MerchantService_ListMerchantsServer) error {
+func (UnimplementedMerchantServiceServer) ListMerchants(*api.ListMerchantsRequest, MerchantService_ListMerchantsServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListMerchants not implemented")
 }
-func (UnimplementedMerchantServiceServer) AddShop(context.Context, *AddShopRequest) (*Shop, error) {
+func (UnimplementedMerchantServiceServer) AddShop(context.Context, *api.AddShopRequest) (*api.Shop, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddShop not implemented")
 }
-func (UnimplementedMerchantServiceServer) DeleteShop(context.Context, *DeleteShopRequest) (*Shop, error) {
+func (UnimplementedMerchantServiceServer) DeleteShop(context.Context, *api.DeleteShopRequest) (*api.Shop, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteShop not implemented")
 }
-func (UnimplementedMerchantServiceServer) ListShops(*ListShopsRequest, MerchantService_ListShopsServer) error {
+func (UnimplementedMerchantServiceServer) ListShops(*api.ListShopsRequest, MerchantService_ListShopsServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListShops not implemented")
 }
-func (UnimplementedMerchantServiceServer) AddTerminal(context.Context, *AddTerminalRequest) (*Terminal, error) {
+func (UnimplementedMerchantServiceServer) AddTerminal(context.Context, *api.AddTerminalRequest) (*api.Terminal, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTerminal not implemented")
 }
-func (UnimplementedMerchantServiceServer) DeleteTerminal(context.Context, *DeleteTerminalRequest) (*Terminal, error) {
+func (UnimplementedMerchantServiceServer) DeleteTerminal(context.Context, *api.DeleteTerminalRequest) (*api.Terminal, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTerminal not implemented")
 }
-func (UnimplementedMerchantServiceServer) ListTerminals(*ListTerminalsRequest, MerchantService_ListTerminalsServer) error {
+func (UnimplementedMerchantServiceServer) ListTerminals(*api.ListTerminalsRequest, MerchantService_ListTerminalsServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListTerminals not implemented")
 }
-func (UnimplementedMerchantServiceServer) Auth(context.Context, *AuthRequest) (*SellerInfo, error) {
+func (UnimplementedMerchantServiceServer) Auth(context.Context, *api.AuthRequest) (*api.SellerInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
 }
 
@@ -329,7 +330,7 @@ func RegisterMerchantServiceServer(s grpc.ServiceRegistrar, srv MerchantServiceS
 }
 
 func _MerchantService_AddPartner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPartnerRequest)
+	in := new(api.AddPartnerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -341,13 +342,13 @@ func _MerchantService_AddPartner_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: "/merchant.MerchantService/AddPartner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).AddPartner(ctx, req.(*AddPartnerRequest))
+		return srv.(MerchantServiceServer).AddPartner(ctx, req.(*api.AddPartnerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_DeletePartner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeletePartnerRequest)
+	in := new(api.DeletePartnerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -359,13 +360,13 @@ func _MerchantService_DeletePartner_Handler(srv interface{}, ctx context.Context
 		FullMethod: "/merchant.MerchantService/DeletePartner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).DeletePartner(ctx, req.(*DeletePartnerRequest))
+		return srv.(MerchantServiceServer).DeletePartner(ctx, req.(*api.DeletePartnerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_ListPartners_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListPartnersRequest)
+	m := new(api.ListPartnersRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -373,7 +374,7 @@ func _MerchantService_ListPartners_Handler(srv interface{}, stream grpc.ServerSt
 }
 
 type MerchantService_ListPartnersServer interface {
-	Send(*Partner) error
+	Send(*api.Partner) error
 	grpc.ServerStream
 }
 
@@ -381,12 +382,12 @@ type merchantServiceListPartnersServer struct {
 	grpc.ServerStream
 }
 
-func (x *merchantServiceListPartnersServer) Send(m *Partner) error {
+func (x *merchantServiceListPartnersServer) Send(m *api.Partner) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 func _MerchantService_AddMerchant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddMerchantRequest)
+	in := new(api.AddMerchantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -398,13 +399,13 @@ func _MerchantService_AddMerchant_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/merchant.MerchantService/AddMerchant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).AddMerchant(ctx, req.(*AddMerchantRequest))
+		return srv.(MerchantServiceServer).AddMerchant(ctx, req.(*api.AddMerchantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_DeleteMerchant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteMerchantRequest)
+	in := new(api.DeleteMerchantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -416,13 +417,13 @@ func _MerchantService_DeleteMerchant_Handler(srv interface{}, ctx context.Contex
 		FullMethod: "/merchant.MerchantService/DeleteMerchant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).DeleteMerchant(ctx, req.(*DeleteMerchantRequest))
+		return srv.(MerchantServiceServer).DeleteMerchant(ctx, req.(*api.DeleteMerchantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_ListMerchants_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListMerchantsRequest)
+	m := new(api.ListMerchantsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -430,7 +431,7 @@ func _MerchantService_ListMerchants_Handler(srv interface{}, stream grpc.ServerS
 }
 
 type MerchantService_ListMerchantsServer interface {
-	Send(*Merchant) error
+	Send(*api.Merchant) error
 	grpc.ServerStream
 }
 
@@ -438,12 +439,12 @@ type merchantServiceListMerchantsServer struct {
 	grpc.ServerStream
 }
 
-func (x *merchantServiceListMerchantsServer) Send(m *Merchant) error {
+func (x *merchantServiceListMerchantsServer) Send(m *api.Merchant) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 func _MerchantService_AddShop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddShopRequest)
+	in := new(api.AddShopRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -455,13 +456,13 @@ func _MerchantService_AddShop_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/merchant.MerchantService/AddShop",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).AddShop(ctx, req.(*AddShopRequest))
+		return srv.(MerchantServiceServer).AddShop(ctx, req.(*api.AddShopRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_DeleteShop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteShopRequest)
+	in := new(api.DeleteShopRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -473,13 +474,13 @@ func _MerchantService_DeleteShop_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: "/merchant.MerchantService/DeleteShop",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).DeleteShop(ctx, req.(*DeleteShopRequest))
+		return srv.(MerchantServiceServer).DeleteShop(ctx, req.(*api.DeleteShopRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_ListShops_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListShopsRequest)
+	m := new(api.ListShopsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -487,7 +488,7 @@ func _MerchantService_ListShops_Handler(srv interface{}, stream grpc.ServerStrea
 }
 
 type MerchantService_ListShopsServer interface {
-	Send(*Shop) error
+	Send(*api.Shop) error
 	grpc.ServerStream
 }
 
@@ -495,12 +496,12 @@ type merchantServiceListShopsServer struct {
 	grpc.ServerStream
 }
 
-func (x *merchantServiceListShopsServer) Send(m *Shop) error {
+func (x *merchantServiceListShopsServer) Send(m *api.Shop) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 func _MerchantService_AddTerminal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddTerminalRequest)
+	in := new(api.AddTerminalRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -512,13 +513,13 @@ func _MerchantService_AddTerminal_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/merchant.MerchantService/AddTerminal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).AddTerminal(ctx, req.(*AddTerminalRequest))
+		return srv.(MerchantServiceServer).AddTerminal(ctx, req.(*api.AddTerminalRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_DeleteTerminal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteTerminalRequest)
+	in := new(api.DeleteTerminalRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -530,13 +531,13 @@ func _MerchantService_DeleteTerminal_Handler(srv interface{}, ctx context.Contex
 		FullMethod: "/merchant.MerchantService/DeleteTerminal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).DeleteTerminal(ctx, req.(*DeleteTerminalRequest))
+		return srv.(MerchantServiceServer).DeleteTerminal(ctx, req.(*api.DeleteTerminalRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MerchantService_ListTerminals_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListTerminalsRequest)
+	m := new(api.ListTerminalsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -544,7 +545,7 @@ func _MerchantService_ListTerminals_Handler(srv interface{}, stream grpc.ServerS
 }
 
 type MerchantService_ListTerminalsServer interface {
-	Send(*Terminal) error
+	Send(*api.Terminal) error
 	grpc.ServerStream
 }
 
@@ -552,12 +553,12 @@ type merchantServiceListTerminalsServer struct {
 	grpc.ServerStream
 }
 
-func (x *merchantServiceListTerminalsServer) Send(m *Terminal) error {
+func (x *merchantServiceListTerminalsServer) Send(m *api.Terminal) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 func _MerchantService_Auth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AuthRequest)
+	in := new(api.AuthRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -569,7 +570,7 @@ func _MerchantService_Auth_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/merchant.MerchantService/Auth",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MerchantServiceServer).Auth(ctx, req.(*AuthRequest))
+		return srv.(MerchantServiceServer).Auth(ctx, req.(*api.AuthRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strings"
 
-	merchpb "merchant-service/proto"
-
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
 
 // Auth get seller info
-func (d Directory) Auth(ctx context.Context, req *merchpb.AuthRequest) (*merchpb.SellerInfo, error) {
+func (d Directory) Auth(ctx context.Context, req *api.AuthRequest) (*api.SellerInfo, error) {
 	authRequest := AuthParams{
 		Login:    req.Login,
 		Password: req.Password,

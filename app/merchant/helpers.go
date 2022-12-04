@@ -18,7 +18,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	merchpb "merchant-service/proto"
+	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
 
 //go:embed migrations/*.sql
@@ -57,7 +57,7 @@ func validateSchema(db *sql.DB, scheme string) error {
 	return sourceInstance.Close()
 }
 
-func partnerPostgresToProto(pgPartner Partner) (*merchpb.Partner, error) {
+func partnerPostgresToProto(pgPartner Partner) (*api.Partner, error) {
 	protoRole, err := rolePostgresToProto(pgPartner.Role)
 	if err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func partnerPostgresToProto(pgPartner Partner) (*merchpb.Partner, error) {
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to assign Api token to string: %s", err.Error())
 	}
-	return &merchpb.Partner{
+	return &api.Partner{
 		Id:         userID,
 		CreateTime: timestamppb.New(pgPartner.CreateTime),
 		FullName:   pgPartner.FullName,
@@ -82,7 +82,7 @@ func partnerPostgresToProto(pgPartner Partner) (*merchpb.Partner, error) {
 	}, nil
 }
 
-func merchantPostgresToProto(pgMerchant Merchant) (*merchpb.Merchant, error) {
+func merchantPostgresToProto(pgMerchant Merchant) (*api.Merchant, error) {
 	var merchantID string
 	err := pgMerchant.ID.AssignTo(&merchantID)
 	if err != nil {
@@ -93,7 +93,7 @@ func merchantPostgresToProto(pgMerchant Merchant) (*merchpb.Merchant, error) {
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to assign partner UUID to string: %s", err.Error())
 	}
-	return &merchpb.Merchant{
+	return &api.Merchant{
 		Id:         merchantID,
 		CreateTime: timestamppb.New(pgMerchant.CreateTime),
 		FullName:   pgMerchant.FullName,
@@ -102,7 +102,7 @@ func merchantPostgresToProto(pgMerchant Merchant) (*merchpb.Merchant, error) {
 	}, nil
 }
 
-func shopPostgresToProto(pgShop Shop) (*merchpb.Shop, error) {
+func shopPostgresToProto(pgShop Shop) (*api.Shop, error) {
 	var shopID string
 	err := pgShop.ID.AssignTo(&shopID)
 	if err != nil {
@@ -113,7 +113,7 @@ func shopPostgresToProto(pgShop Shop) (*merchpb.Shop, error) {
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to assign merchant UUID to string: %s", err.Error())
 	}
-	return &merchpb.Shop{
+	return &api.Shop{
 		Id:         shopID,
 		CreateTime: timestamppb.New(pgShop.CreateTime),
 		FullName:   pgShop.FullName,
@@ -124,7 +124,7 @@ func shopPostgresToProto(pgShop Shop) (*merchpb.Shop, error) {
 	}, nil
 }
 
-func terminalPostgresToProto(pgTerminal Terminal) (*merchpb.Terminal, error) {
+func terminalPostgresToProto(pgTerminal Terminal) (*api.Terminal, error) {
 	var terminalID string
 	err := pgTerminal.ID.AssignTo(&terminalID)
 	if err != nil {
@@ -135,7 +135,7 @@ func terminalPostgresToProto(pgTerminal Terminal) (*merchpb.Terminal, error) {
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to assign shop UUID to string: %s", err.Error())
 	}
-	return &merchpb.Terminal{
+	return &api.Terminal{
 		Id:         shopID,
 		CreateTime: timestamppb.New(pgTerminal.CreateTime),
 		FullName:   pgTerminal.FullName,
@@ -146,10 +146,10 @@ func terminalPostgresToProto(pgTerminal Terminal) (*merchpb.Terminal, error) {
 	}, nil
 }
 
-func authinfoPostgresToProto(pgSellerinfo AuthRow) (*merchpb.SellerInfo, error) {
+func authinfoPostgresToProto(pgSellerinfo AuthRow) (*api.SellerInfo, error) {
 	fmt.Println(pgSellerinfo.TerminalID.Status)
 	if pgSellerinfo.TerminalID.Status == pgtype.Undefined {
-		return &merchpb.SellerInfo{
+		return &api.SellerInfo{
 			Status: false,
 		}, nil
 
@@ -178,25 +178,25 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*merchpb.SellerInfo, error) 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to assign terminal UUID to string: %s", err.Error())
 	}
-	return &merchpb.SellerInfo{
+	return &api.SellerInfo{
 		Status: true,
-		PartnerInfo: &merchpb.Partner{
+		PartnerInfo: &api.Partner{
 			Id:       partnerID,
 			FullName: pgSellerinfo.PartnerFullName,
 			Url:      pgSellerinfo.PartnerUrl,
 			Role:     protoRole,
 		},
-		MerchantInfo: &merchpb.Merchant{
+		MerchantInfo: &api.Merchant{
 			Id:       merchantID,
 			FullName: pgSellerinfo.MerchantFullName,
 			Url:      pgSellerinfo.MerchantUrl,
 		},
-		ShopInfo: &merchpb.Shop{
+		ShopInfo: &api.Shop{
 			Id:       shopID,
 			FullName: pgSellerinfo.ShopFullName,
 			Url:      pgSellerinfo.ShopUrl,
 		},
-		TerminalInfo: &merchpb.Terminal{
+		TerminalInfo: &api.Terminal{
 			Id:       terminalID,
 			FullName: pgSellerinfo.TerminalFullName,
 			Url:      pgSellerinfo.TerminalUrl,
@@ -204,30 +204,30 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*merchpb.SellerInfo, error) 
 	}, nil
 }
 
-func rolePostgresToProto(pgRole Role) (merchpb.Role, error) {
+func rolePostgresToProto(pgRole Role) (api.Role, error) {
 	switch pgRole {
 	case RoleBasePartner:
-		return merchpb.Role_BASE_PARTNER, nil
+		return api.Role_BASE_PARTNER, nil
 	case RolePartner:
-		return merchpb.Role_PARTNER, nil
+		return api.Role_PARTNER, nil
 	case RoleAdmin:
-		return merchpb.Role_ADMIN, nil
+		return api.Role_ADMIN, nil
 	case RoleGuest:
-		return merchpb.Role_GUEST, nil
+		return api.Role_GUEST, nil
 	default:
 		return 0, status.Errorf(codes.Internal, "unknown role type %q", pgRole)
 	}
 }
 
-func roleProtoToPostgres(pbRole merchpb.Role) (Role, error) {
+func roleProtoToPostgres(pbRole api.Role) (Role, error) {
 	switch pbRole {
-	case merchpb.Role_GUEST:
+	case api.Role_GUEST:
 		return RoleGuest, nil
-	case merchpb.Role_ADMIN:
+	case api.Role_ADMIN:
 		return RoleAdmin, nil
-	case merchpb.Role_PARTNER:
+	case api.Role_PARTNER:
 		return RolePartner, nil
-	case merchpb.Role_BASE_PARTNER:
+	case api.Role_BASE_PARTNER:
 		return RoleBasePartner, nil
 	default:
 		return "", status.Errorf(codes.InvalidArgument, "unknown role type %q", pbRole)
@@ -237,7 +237,7 @@ func roleProtoToPostgres(pbRole merchpb.Role) (Role, error) {
 var _ pgx.CopyFromSource = (*partnersSource)(nil)
 
 type partnersSource struct {
-	getPartner func() (*merchpb.AddPartnerRequest, error)
+	getPartner func() (*api.AddPartnerRequest, error)
 	nextValues []interface{}
 	err        error
 }
@@ -246,7 +246,7 @@ func (p *partnersSource) Next() bool {
 	if p.err != nil {
 		return false
 	}
-	var req *merchpb.AddPartnerRequest
+	var req *api.AddPartnerRequest
 	req, p.err = p.getPartner()
 	if p.err != nil {
 		return false

@@ -9,10 +9,12 @@ import (
 	"google.golang.org/grpc/status"
 
 	merchpb "merchant-service/proto"
+
+	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
 
 // AddTerminal adds a terminal to the directory.
-func (d Directory) AddTerminal(ctx context.Context, req *merchpb.AddTerminalRequest) (*merchpb.Terminal, error) {
+func (d Directory) AddTerminal(ctx context.Context, req *api.AddTerminalRequest) (*api.Terminal, error) {
 	var shopID pgtype.UUID
 	err := shopID.Set(req.GetShopId())
 	if err != nil {
@@ -32,7 +34,7 @@ func (d Directory) AddTerminal(ctx context.Context, req *merchpb.AddTerminalRequ
 }
 
 // DeleteTerminal deletes the terminal, if found.
-func (d Directory) DeleteTerminal(ctx context.Context, req *merchpb.DeleteTerminalRequest) (*merchpb.Terminal, error) {
+func (d Directory) DeleteTerminal(ctx context.Context, req *api.DeleteTerminalRequest) (*api.Terminal, error) {
 	var terminalID pgtype.UUID
 	err := terminalID.Set(req.GetId())
 	if err != nil {
@@ -46,7 +48,7 @@ func (d Directory) DeleteTerminal(ctx context.Context, req *merchpb.DeleteTermin
 }
 
 // ListPartners lists terminals in the directory, subject to the request filters.
-func (d Directory) ListTerminals(req *merchpb.ListTerminalsRequest, srv merchpb.MerchantService_ListTerminalsServer) (retErr error) {
+func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.MerchantService_ListTerminalsServer) (retErr error) {
 	q := d.sb.Select(
 		"id",
 		"create_time",
