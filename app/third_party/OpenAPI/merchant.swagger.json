@@ -67,6 +67,80 @@
       ],
       "default": "BASE_PARTNER"
     },
+    "merchantSellerInfo": {
+      "type": "object",
+      "properties": {
+        "Status": {
+          "type": "boolean"
+        },
+        "TerminalInfo": {
+          "$ref": "#/definitions/merchantTerminal"
+        },
+        "ShopInfo": {
+          "$ref": "#/definitions/merchantShop"
+        },
+        "MerchantInfo": {
+          "$ref": "#/definitions/merchantMerchant"
+        },
+        "PartnerInfo": {
+          "$ref": "#/definitions/merchantPartner"
+        }
+      }
+    },
+    "merchantShop": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "merchant_id": {
+          "type": "string"
+        },
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "merchantTerminal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "shop_id": {
+          "type": "string"
+        },
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {

@@ -14,6 +14,13 @@ service MerchantService {
     rpc AddMerchant(AddMerchantRequest) returns (Merchant) {}
     rpc DeleteMerchant(DeleteMerchantRequest) returns (Merchant) {}
     rpc ListMerchants(ListMerchantsRequest) returns (stream Merchant) {}
+    rpc AddShop(AddShopRequest) returns (Shop) {}
+    rpc DeleteShop(DeleteShopRequest) returns (Shop) {}
+    rpc ListShops(ListShopsRequest) returns (stream Shop) {}
+    rpc AddTerminal(AddTerminalRequest) returns (Terminal) {}
+    rpc DeleteTerminal(DeleteTerminalRequest) returns (Terminal) {}
+    rpc ListTerminals(ListTerminalsRequest) returns (stream Terminal) {}
+    rpc Auth(AuthRequest) returns (SellerInfo) {}
 }
 
 enum Role {
@@ -40,6 +47,37 @@ message Merchant {
     string partner_id = 5;
 }
 
+message Shop {
+    string id = 1;
+    google.protobuf.Timestamp create_time = 2;
+    string full_name = 3;
+    string url = 4;
+    string merchant_id = 5;
+    string login = 6;
+    string password = 7;
+}
+
+message Terminal {
+    string id = 1;
+    google.protobuf.Timestamp create_time = 2;
+    string full_name = 3;
+    string url = 4;
+    string shop_id = 5;
+    string login = 6;
+    string password = 7;
+}
+
+message SellerInfo {
+    bool Status = 1;
+    Terminal TerminalInfo = 2;
+    Shop ShopInfo = 3;
+    Merchant MerchantInfo = 4;
+    Partner PartnerInfo = 5;
+}
+
+//
+// Partners
+// 
 message PartnerRole {
     Role role = 1;
 }
@@ -61,6 +99,9 @@ message ListPartnersRequest {
     google.protobuf.Duration older_than = 2;
 }
 
+//
+// Merchants
+//
 message AddMerchantRequest {
     string full_name = 1;
     string url = 2;
@@ -79,3 +120,61 @@ message ListMerchantsRequest {
     // Only list merchants older than this Duration
     google.protobuf.Duration older_than = 3;
 }
+
+//
+// Shops
+//
+message AddShopRequest {
+    string full_name = 1;
+    string url = 2;
+    string merchant_id = 3;
+    string login = 4;
+    string password = 5;
+}
+
+message DeleteShopRequest {
+    string id = 1;
+}
+
+message ListShopsRequest {
+    // Only list shops created for merchant with id
+    string merchant_id = 1;
+    // Only list merchants created after this timestamp
+    google.protobuf.Timestamp created_since = 2;
+    // Only list merchants older than this Duration
+    google.protobuf.Duration older_than = 3;
+}
+
+//
+// Terminals
+//
+message AddTerminalRequest {
+    string full_name = 1;
+    string url = 2;
+    string shop_id = 3;
+    string login = 4;
+    string password = 5;
+}
+
+message DeleteTerminalRequest {
+    string id = 1;
+}
+
+message ListTerminalsRequest {
+    // Only list terminals created for shop with id
+    string shop_id = 1;
+    // Only list merchants created after this timestamp
+    google.protobuf.Timestamp created_since = 2;
+    // Only list merchants older than this Duration
+    google.protobuf.Duration older_than = 3;
+}
+
+//
+// Seller info
+//
+message AuthRequest {
+    string login = 1;
+    string password = 2;
+    string token = 3;
+}
+

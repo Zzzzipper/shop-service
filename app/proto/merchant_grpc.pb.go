@@ -28,6 +28,13 @@ type MerchantServiceClient interface {
 	AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*Merchant, error)
 	DeleteMerchant(ctx context.Context, in *DeleteMerchantRequest, opts ...grpc.CallOption) (*Merchant, error)
 	ListMerchants(ctx context.Context, in *ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error)
+	AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error)
+	DeleteShop(ctx context.Context, in *DeleteShopRequest, opts ...grpc.CallOption) (*Shop, error)
+	ListShops(ctx context.Context, in *ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error)
+	AddTerminal(ctx context.Context, in *AddTerminalRequest, opts ...grpc.CallOption) (*Terminal, error)
+	DeleteTerminal(ctx context.Context, in *DeleteTerminalRequest, opts ...grpc.CallOption) (*Terminal, error)
+	ListTerminals(ctx context.Context, in *ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error)
+	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*SellerInfo, error)
 }
 
 type merchantServiceClient struct {
@@ -138,6 +145,115 @@ func (x *merchantServiceListMerchantsClient) Recv() (*Merchant, error) {
 	return m, nil
 }
 
+func (c *merchantServiceClient) AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error) {
+	out := new(Shop)
+	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddShop", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *DeleteShopRequest, opts ...grpc.CallOption) (*Shop, error) {
+	out := new(Shop)
+	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteShop", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *merchantServiceClient) ListShops(ctx context.Context, in *ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[2], "/merchant.MerchantService/ListShops", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &merchantServiceListShopsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MerchantService_ListShopsClient interface {
+	Recv() (*Shop, error)
+	grpc.ClientStream
+}
+
+type merchantServiceListShopsClient struct {
+	grpc.ClientStream
+}
+
+func (x *merchantServiceListShopsClient) Recv() (*Shop, error) {
+	m := new(Shop)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *AddTerminalRequest, opts ...grpc.CallOption) (*Terminal, error) {
+	out := new(Terminal)
+	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddTerminal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *DeleteTerminalRequest, opts ...grpc.CallOption) (*Terminal, error) {
+	out := new(Terminal)
+	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteTerminal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *merchantServiceClient) ListTerminals(ctx context.Context, in *ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[3], "/merchant.MerchantService/ListTerminals", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &merchantServiceListTerminalsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MerchantService_ListTerminalsClient interface {
+	Recv() (*Terminal, error)
+	grpc.ClientStream
+}
+
+type merchantServiceListTerminalsClient struct {
+	grpc.ClientStream
+}
+
+func (x *merchantServiceListTerminalsClient) Recv() (*Terminal, error) {
+	m := new(Terminal)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *merchantServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*SellerInfo, error) {
+	out := new(SellerInfo)
+	err := c.cc.Invoke(ctx, "/merchant.MerchantService/Auth", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MerchantServiceServer is the server API for MerchantService service.
 // All implementations should embed UnimplementedMerchantServiceServer
 // for forward compatibility
@@ -148,6 +264,13 @@ type MerchantServiceServer interface {
 	AddMerchant(context.Context, *AddMerchantRequest) (*Merchant, error)
 	DeleteMerchant(context.Context, *DeleteMerchantRequest) (*Merchant, error)
 	ListMerchants(*ListMerchantsRequest, MerchantService_ListMerchantsServer) error
+	AddShop(context.Context, *AddShopRequest) (*Shop, error)
+	DeleteShop(context.Context, *DeleteShopRequest) (*Shop, error)
+	ListShops(*ListShopsRequest, MerchantService_ListShopsServer) error
+	AddTerminal(context.Context, *AddTerminalRequest) (*Terminal, error)
+	DeleteTerminal(context.Context, *DeleteTerminalRequest) (*Terminal, error)
+	ListTerminals(*ListTerminalsRequest, MerchantService_ListTerminalsServer) error
+	Auth(context.Context, *AuthRequest) (*SellerInfo, error)
 }
 
 // UnimplementedMerchantServiceServer should be embedded to have forward compatible implementations.
@@ -171,6 +294,27 @@ func (UnimplementedMerchantServiceServer) DeleteMerchant(context.Context, *Delet
 }
 func (UnimplementedMerchantServiceServer) ListMerchants(*ListMerchantsRequest, MerchantService_ListMerchantsServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListMerchants not implemented")
+}
+func (UnimplementedMerchantServiceServer) AddShop(context.Context, *AddShopRequest) (*Shop, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddShop not implemented")
+}
+func (UnimplementedMerchantServiceServer) DeleteShop(context.Context, *DeleteShopRequest) (*Shop, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteShop not implemented")
+}
+func (UnimplementedMerchantServiceServer) ListShops(*ListShopsRequest, MerchantService_ListShopsServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListShops not implemented")
+}
+func (UnimplementedMerchantServiceServer) AddTerminal(context.Context, *AddTerminalRequest) (*Terminal, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTerminal not implemented")
+}
+func (UnimplementedMerchantServiceServer) DeleteTerminal(context.Context, *DeleteTerminalRequest) (*Terminal, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTerminal not implemented")
+}
+func (UnimplementedMerchantServiceServer) ListTerminals(*ListTerminalsRequest, MerchantService_ListTerminalsServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListTerminals not implemented")
+}
+func (UnimplementedMerchantServiceServer) Auth(context.Context, *AuthRequest) (*SellerInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
 }
 
 // UnsafeMerchantServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -298,6 +442,138 @@ func (x *merchantServiceListMerchantsServer) Send(m *Merchant) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _MerchantService_AddShop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddShopRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MerchantServiceServer).AddShop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/merchant.MerchantService/AddShop",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MerchantServiceServer).AddShop(ctx, req.(*AddShopRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MerchantService_DeleteShop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteShopRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MerchantServiceServer).DeleteShop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/merchant.MerchantService/DeleteShop",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MerchantServiceServer).DeleteShop(ctx, req.(*DeleteShopRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MerchantService_ListShops_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ListShopsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MerchantServiceServer).ListShops(m, &merchantServiceListShopsServer{stream})
+}
+
+type MerchantService_ListShopsServer interface {
+	Send(*Shop) error
+	grpc.ServerStream
+}
+
+type merchantServiceListShopsServer struct {
+	grpc.ServerStream
+}
+
+func (x *merchantServiceListShopsServer) Send(m *Shop) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _MerchantService_AddTerminal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTerminalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MerchantServiceServer).AddTerminal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/merchant.MerchantService/AddTerminal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MerchantServiceServer).AddTerminal(ctx, req.(*AddTerminalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MerchantService_DeleteTerminal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTerminalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MerchantServiceServer).DeleteTerminal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/merchant.MerchantService/DeleteTerminal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MerchantServiceServer).DeleteTerminal(ctx, req.(*DeleteTerminalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MerchantService_ListTerminals_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ListTerminalsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MerchantServiceServer).ListTerminals(m, &merchantServiceListTerminalsServer{stream})
+}
+
+type MerchantService_ListTerminalsServer interface {
+	Send(*Terminal) error
+	grpc.ServerStream
+}
+
+type merchantServiceListTerminalsServer struct {
+	grpc.ServerStream
+}
+
+func (x *merchantServiceListTerminalsServer) Send(m *Terminal) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _MerchantService_Auth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MerchantServiceServer).Auth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/merchant.MerchantService/Auth",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MerchantServiceServer).Auth(ctx, req.(*AuthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MerchantService_ServiceDesc is the grpc.ServiceDesc for MerchantService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -321,6 +597,26 @@ var MerchantService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteMerchant",
 			Handler:    _MerchantService_DeleteMerchant_Handler,
 		},
+		{
+			MethodName: "AddShop",
+			Handler:    _MerchantService_AddShop_Handler,
+		},
+		{
+			MethodName: "DeleteShop",
+			Handler:    _MerchantService_DeleteShop_Handler,
+		},
+		{
+			MethodName: "AddTerminal",
+			Handler:    _MerchantService_AddTerminal_Handler,
+		},
+		{
+			MethodName: "DeleteTerminal",
+			Handler:    _MerchantService_DeleteTerminal_Handler,
+		},
+		{
+			MethodName: "Auth",
+			Handler:    _MerchantService_Auth_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -331,6 +627,16 @@ var MerchantService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ListMerchants",
 			Handler:       _MerchantService_ListMerchants_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ListShops",
+			Handler:       _MerchantService_ListShops_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ListTerminals",
+			Handler:       _MerchantService_ListTerminals_Handler,
 			ServerStreams: true,
 		},
 	},

@@ -12,6 +12,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/cockroachdb"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
+	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -98,6 +99,108 @@ func merchantPostgresToProto(pgMerchant Merchant) (*merchpb.Merchant, error) {
 		FullName:   pgMerchant.FullName,
 		Url:        pgMerchant.Url,
 		PartnerId:  partnerID,
+	}, nil
+}
+
+func shopPostgresToProto(pgShop Shop) (*merchpb.Shop, error) {
+	var shopID string
+	err := pgShop.ID.AssignTo(&shopID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign shop UUID to string: %s", err.Error())
+	}
+	var merchantID string
+	err = pgShop.MerchantID.AssignTo(&merchantID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign merchant UUID to string: %s", err.Error())
+	}
+	return &merchpb.Shop{
+		Id:         shopID,
+		CreateTime: timestamppb.New(pgShop.CreateTime),
+		FullName:   pgShop.FullName,
+		Url:        pgShop.Url,
+		MerchantId: merchantID,
+		Login:      pgShop.Login,
+		Password:   pgShop.Password,
+	}, nil
+}
+
+func terminalPostgresToProto(pgTerminal Terminal) (*merchpb.Terminal, error) {
+	var terminalID string
+	err := pgTerminal.ID.AssignTo(&terminalID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign terminal UUID to string: %s", err.Error())
+	}
+	var shopID string
+	err = pgTerminal.ShopID.AssignTo(&shopID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign shop UUID to string: %s", err.Error())
+	}
+	return &merchpb.Terminal{
+		Id:         shopID,
+		CreateTime: timestamppb.New(pgTerminal.CreateTime),
+		FullName:   pgTerminal.FullName,
+		Url:        pgTerminal.Url,
+		ShopId:     shopID,
+		Login:      pgTerminal.Login,
+		Password:   pgTerminal.Password,
+	}, nil
+}
+
+func authinfoPostgresToProto(pgSellerinfo AuthRow) (*merchpb.SellerInfo, error) {
+	fmt.Println(pgSellerinfo.TerminalID.Status)
+	if pgSellerinfo.TerminalID.Status == pgtype.Undefined {
+		return &merchpb.SellerInfo{
+			Status: false,
+		}, nil
+
+	}
+	protoRole, err := rolePostgresToProto(pgSellerinfo.PartnerRole)
+	if err != nil {
+		return nil, err
+	}
+	var partnerID string
+	err = pgSellerinfo.PartnerID.AssignTo(&partnerID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign partner UUID to string: %s", err.Error())
+	}
+	var merchantID string
+	err = pgSellerinfo.MerchantID.AssignTo(&merchantID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign merchant UUID to string: %s", err.Error())
+	}
+	var shopID string
+	err = pgSellerinfo.ShopID.AssignTo(&shopID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign shop UUID to string: %s", err.Error())
+	}
+	var terminalID string
+	err = pgSellerinfo.TerminalID.AssignTo(&terminalID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to assign terminal UUID to string: %s", err.Error())
+	}
+	return &merchpb.SellerInfo{
+		Status: true,
+		PartnerInfo: &merchpb.Partner{
+			Id:       partnerID,
+			FullName: pgSellerinfo.PartnerFullName,
+			Url:      pgSellerinfo.PartnerUrl,
+			Role:     protoRole,
+		},
+		MerchantInfo: &merchpb.Merchant{
+			Id:       merchantID,
+			FullName: pgSellerinfo.MerchantFullName,
+			Url:      pgSellerinfo.MerchantUrl,
+		},
+		ShopInfo: &merchpb.Shop{
+			Id:       shopID,
+			FullName: pgSellerinfo.ShopFullName,
+			Url:      pgSellerinfo.ShopUrl,
+		},
+		TerminalInfo: &merchpb.Terminal{
+			Id:       terminalID,
+			FullName: pgSellerinfo.TerminalFullName,
+			Url:      pgSellerinfo.TerminalUrl,
+		},
 	}, nil
 }
 

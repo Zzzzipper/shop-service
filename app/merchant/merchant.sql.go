@@ -74,6 +74,161 @@ func (q *Queries) AddPartner(ctx context.Context, arg AddPartnerParams) (Partner
 	return i, err
 }
 
+const addShop = `-- name: AddShop :one
+INSERT INTO shops (
+  full_name,
+  url,
+  merchant_id,
+  login,
+  password
+) VALUES (
+  $1, 
+  $2,
+  $3,
+  $4,
+  $5
+)
+RETURNING id, create_time, full_name, merchant_id, login, password, url
+`
+
+type AddShopParams struct {
+	FullName   string
+	Url        string
+	MerchantID pgtype.UUID
+	Login      string
+	Password   string
+}
+
+func (q *Queries) AddShop(ctx context.Context, arg AddShopParams) (Shop, error) {
+	row := q.db.QueryRowContext(ctx, addShop,
+		arg.FullName,
+		arg.Url,
+		arg.MerchantID,
+		arg.Login,
+		arg.Password,
+	)
+	var i Shop
+	err := row.Scan(
+		&i.ID,
+		&i.CreateTime,
+		&i.FullName,
+		&i.MerchantID,
+		&i.Login,
+		&i.Password,
+		&i.Url,
+	)
+	return i, err
+}
+
+const addTerminal = `-- name: AddTerminal :one
+INSERT INTO terminals (
+  full_name,
+  url,
+  shop_id,
+  login,
+  password
+) VALUES (
+  $1, 
+  $2,
+  $3,
+  $4,
+  $5
+)
+RETURNING id, create_time, full_name, shop_id, login, password, url
+`
+
+type AddTerminalParams struct {
+	FullName string
+	Url      string
+	ShopID   pgtype.UUID
+	Login    string
+	Password string
+}
+
+func (q *Queries) AddTerminal(ctx context.Context, arg AddTerminalParams) (Terminal, error) {
+	row := q.db.QueryRowContext(ctx, addTerminal,
+		arg.FullName,
+		arg.Url,
+		arg.ShopID,
+		arg.Login,
+		arg.Password,
+	)
+	var i Terminal
+	err := row.Scan(
+		&i.ID,
+		&i.CreateTime,
+		&i.FullName,
+		&i.ShopID,
+		&i.Login,
+		&i.Password,
+		&i.Url,
+	)
+	return i, err
+}
+
+const auth = `-- name: Auth :one
+SELECT
+  p.id as partner_id, p.full_name as partner_full_name, p.url as partner_url, p.role as partner_role,
+	m.id as merchant_id, m.full_name as merchant_full_name, m.url as merchant_url, 
+	s.id as shop_id, s.full_name as shop_full_name, s.url as shop_url,
+	t.id as terminal_id, t.full_name as terminal_full_name, t.url as terminal_url
+FROM 
+	terminals t, shops s, merchants m, partners p
+WHERE
+	t.shop_id=s.id 
+AND
+	s.merchant_id=m.id
+AND 
+	m.partner_id=p.id
+AND
+	t.login=$1
+AND
+	t.password=$2
+LIMIT 1
+`
+
+type AuthParams struct {
+	Login    string
+	Password string
+}
+
+type AuthRow struct {
+	PartnerID        pgtype.UUID
+	PartnerFullName  string
+	PartnerUrl       string
+	PartnerRole      Role
+	MerchantID       pgtype.UUID
+	MerchantFullName string
+	MerchantUrl      string
+	ShopID           pgtype.UUID
+	ShopFullName     string
+	ShopUrl          string
+	TerminalID       pgtype.UUID
+	TerminalFullName string
+	TerminalUrl      string
+}
+
+func (q *Queries) Auth(ctx context.Context, arg AuthParams) (AuthRow, error) {
+	row := q.db.QueryRowContext(ctx, auth, arg.Login, arg.Password)
+	var i AuthRow
+	err := row.Scan(
+		&i.PartnerID,
+		&i.PartnerFullName,
+		&i.PartnerUrl,
+		&i.PartnerRole,
+		&i.MerchantID,
+		&i.MerchantFullName,
+		&i.MerchantUrl,
+		&i.ShopID,
+		&i.ShopFullName,
+		&i.ShopUrl,
+		&i.TerminalID,
+		&i.TerminalFullName,
+		&i.TerminalUrl,
+	)
+	return i, err
+}
+
 const deleteMerchant = `-- name: DeleteMerchant :one
 DELETE FROM merchants
 WHERE id = $1
@@ -109,6 +264,48 @@ func (q *Queries) DeletePartner(ctx context.Context, id pgtype.UUID) (Partner, e
 		&i.Url,
 		&i.ApiToken,
 		&i.Role,
+	)
+	return i, err
+}
+
+const deleteShop = `-- name: DeleteShop :one
+DELETE FROM shops
+WHERE id = $1
+RETURNING id, create_time, full_name, merchant_id, login, password, url
+`
+
+func (q *Queries) DeleteShop(ctx context.Context, id pgtype.UUID) (Shop, error) {
+	row := q.db.QueryRowContext(ctx, deleteShop, id)
+	var i Shop
+	err := row.Scan(
+		&i.ID,
+		&i.CreateTime,
+		&i.FullName,
+		&i.MerchantID,
+		&i.Login,
+		&i.Password,
+		&i.Url,
+	)
+	return i, err
+}
+
+const deleteTerminal = `-- name: DeleteTerminal :one
+DELETE FROM terminals
+WHERE id = $1
+RETURNING id, create_time, full_name, shop_id, login, password, url
+`
+
+func (q *Queries) DeleteTerminal(ctx context.Context, id pgtype.UUID) (Terminal, error) {
+	row := q.db.QueryRowContext(ctx, deleteTerminal, id)
+	var i Terminal
+	err := row.Scan(
+		&i.ID,
+		&i.CreateTime,
+		&i.FullName,
+		&i.ShopID,
+		&i.Login,
+		&i.Password,
+		&i.Url,
 	)
 	return i, err
 }
