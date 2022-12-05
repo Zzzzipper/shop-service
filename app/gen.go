@@ -1,3 +1,3 @@
 //go:generate make
 
-package main
+package app
