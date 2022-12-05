@@ -71,8 +71,20 @@
     "apiSellerInfo": {
       "type": "object",
       "properties": {
-        "Status": {
-          "type": "boolean"
+        "Success": {
+          "type": "boolean",
+          "format": "true,false",
+          "description": "Флаг успешности операции\ttrue/false"
+        },
+        "ErrCode": {
+          "type": "string",
+          "format": "string",
+          "description": "Описание ошибки. Передается, если в ответе Success=false"
+        },
+        "ErrMessage": {
+          "type": "string",
+          "format": "string",
+          "description": "Опциональный параметр. Дополнительное описание ошибки"
         },
         "TerminalInfo": {
           "$ref": "#/definitions/apiTerminal"

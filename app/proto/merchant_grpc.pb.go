@@ -4,7 +4,7 @@
 // - protoc             v3.6.1
 // source: proto/merchant.proto
 
-package merchant
+package proto
 
 import (
 	context "context"
@@ -48,7 +48,7 @@ func NewMerchantServiceClient(cc grpc.ClientConnInterface) MerchantServiceClient
 
 func (c *merchantServiceClient) AddPartner(ctx context.Context, in *api.AddPartnerRequest, opts ...grpc.CallOption) (*api.Partner, error) {
 	out := new(api.Partner)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddPartner", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/AddPartner", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *merchantServiceClient) AddPartner(ctx context.Context, in *api.AddPartn
 
 func (c *merchantServiceClient) DeletePartner(ctx context.Context, in *api.DeletePartnerRequest, opts ...grpc.CallOption) (*api.Partner, error) {
 	out := new(api.Partner)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeletePartner", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/DeletePartner", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (c *merchantServiceClient) DeletePartner(ctx context.Context, in *api.Delet
 }
 
 func (c *merchantServiceClient) ListPartners(ctx context.Context, in *api.ListPartnersRequest, opts ...grpc.CallOption) (MerchantService_ListPartnersClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[0], "/merchant.MerchantService/ListPartners", opts...)
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[0], "/proto.MerchantService/ListPartners", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (x *merchantServiceListPartnersClient) Recv() (*api.Partner, error) {
 
 func (c *merchantServiceClient) AddMerchant(ctx context.Context, in *api.AddMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error) {
 	out := new(api.Merchant)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddMerchant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/AddMerchant", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func (c *merchantServiceClient) AddMerchant(ctx context.Context, in *api.AddMerc
 
 func (c *merchantServiceClient) DeleteMerchant(ctx context.Context, in *api.DeleteMerchantRequest, opts ...grpc.CallOption) (*api.Merchant, error) {
 	out := new(api.Merchant)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteMerchant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/DeleteMerchant", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func (c *merchantServiceClient) DeleteMerchant(ctx context.Context, in *api.Dele
 }
 
 func (c *merchantServiceClient) ListMerchants(ctx context.Context, in *api.ListMerchantsRequest, opts ...grpc.CallOption) (MerchantService_ListMerchantsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[1], "/merchant.MerchantService/ListMerchants", opts...)
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[1], "/proto.MerchantService/ListMerchants", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (x *merchantServiceListMerchantsClient) Recv() (*api.Merchant, error) {
 
 func (c *merchantServiceClient) AddShop(ctx context.Context, in *api.AddShopRequest, opts ...grpc.CallOption) (*api.Shop, error) {
 	out := new(api.Shop)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddShop", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/AddShop", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func (c *merchantServiceClient) AddShop(ctx context.Context, in *api.AddShopRequ
 
 func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *api.DeleteShopRequest, opts ...grpc.CallOption) (*api.Shop, error) {
 	out := new(api.Shop)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteShop", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/DeleteShop", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (c *merchantServiceClient) DeleteShop(ctx context.Context, in *api.DeleteSh
 }
 
 func (c *merchantServiceClient) ListShops(ctx context.Context, in *api.ListShopsRequest, opts ...grpc.CallOption) (MerchantService_ListShopsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[2], "/merchant.MerchantService/ListShops", opts...)
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[2], "/proto.MerchantService/ListShops", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -198,7 +198,7 @@ func (x *merchantServiceListShopsClient) Recv() (*api.Shop, error) {
 
 func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *api.AddTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error) {
 	out := new(api.Terminal)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/AddTerminal", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/AddTerminal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +207,7 @@ func (c *merchantServiceClient) AddTerminal(ctx context.Context, in *api.AddTerm
 
 func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *api.DeleteTerminalRequest, opts ...grpc.CallOption) (*api.Terminal, error) {
 	out := new(api.Terminal)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/DeleteTerminal", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/DeleteTerminal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (c *merchantServiceClient) DeleteTerminal(ctx context.Context, in *api.Dele
 }
 
 func (c *merchantServiceClient) ListTerminals(ctx context.Context, in *api.ListTerminalsRequest, opts ...grpc.CallOption) (MerchantService_ListTerminalsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[3], "/merchant.MerchantService/ListTerminals", opts...)
+	stream, err := c.cc.NewStream(ctx, &MerchantService_ServiceDesc.Streams[3], "/proto.MerchantService/ListTerminals", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +248,7 @@ func (x *merchantServiceListTerminalsClient) Recv() (*api.Terminal, error) {
 
 func (c *merchantServiceClient) Auth(ctx context.Context, in *api.AuthRequest, opts ...grpc.CallOption) (*api.SellerInfo, error) {
 	out := new(api.SellerInfo)
-	err := c.cc.Invoke(ctx, "/merchant.MerchantService/Auth", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.MerchantService/Auth", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -339,7 +339,7 @@ func _MerchantService_AddPartner_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/AddPartner",
+		FullMethod: "/proto.MerchantService/AddPartner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).AddPartner(ctx, req.(*api.AddPartnerRequest))
@@ -357,7 +357,7 @@ func _MerchantService_DeletePartner_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/DeletePartner",
+		FullMethod: "/proto.MerchantService/DeletePartner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).DeletePartner(ctx, req.(*api.DeletePartnerRequest))
@@ -396,7 +396,7 @@ func _MerchantService_AddMerchant_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/AddMerchant",
+		FullMethod: "/proto.MerchantService/AddMerchant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).AddMerchant(ctx, req.(*api.AddMerchantRequest))
@@ -414,7 +414,7 @@ func _MerchantService_DeleteMerchant_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/DeleteMerchant",
+		FullMethod: "/proto.MerchantService/DeleteMerchant",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).DeleteMerchant(ctx, req.(*api.DeleteMerchantRequest))
@@ -453,7 +453,7 @@ func _MerchantService_AddShop_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/AddShop",
+		FullMethod: "/proto.MerchantService/AddShop",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).AddShop(ctx, req.(*api.AddShopRequest))
@@ -471,7 +471,7 @@ func _MerchantService_DeleteShop_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/DeleteShop",
+		FullMethod: "/proto.MerchantService/DeleteShop",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).DeleteShop(ctx, req.(*api.DeleteShopRequest))
@@ -510,7 +510,7 @@ func _MerchantService_AddTerminal_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/AddTerminal",
+		FullMethod: "/proto.MerchantService/AddTerminal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).AddTerminal(ctx, req.(*api.AddTerminalRequest))
@@ -528,7 +528,7 @@ func _MerchantService_DeleteTerminal_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/DeleteTerminal",
+		FullMethod: "/proto.MerchantService/DeleteTerminal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).DeleteTerminal(ctx, req.(*api.DeleteTerminalRequest))
@@ -567,7 +567,7 @@ func _MerchantService_Auth_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/merchant.MerchantService/Auth",
+		FullMethod: "/proto.MerchantService/Auth",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MerchantServiceServer).Auth(ctx, req.(*api.AuthRequest))
@@ -579,7 +579,7 @@ func _MerchantService_Auth_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MerchantService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "merchant.MerchantService",
+	ServiceName: "proto.MerchantService",
 	HandlerType: (*MerchantServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
