@@ -9,7 +9,7 @@ import "merchant/api/shop_types.proto";
 import "merchant/api/terminal_types.proto";
 
 
-option go_package = "merchant-service/proto;merchant";
+option go_package = "gitlab.mapcard.pro/external-map-team/merchant-service/proto;merchant";
 
 service MerchantService {
     rpc AddPartner(merchant.api.AddPartnerRequest) returns (merchant.api.Partner) {}
