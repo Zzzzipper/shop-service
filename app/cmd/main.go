@@ -12,11 +12,11 @@ import (
 	"github.com/fullstorydev/grpcui/standalone"
 	"github.com/sirupsen/logrus"
 	"github.com/soheilhy/cmux"
+	"gitlab.mapcard.pro/external-map-team/merchant-service/app/merchant"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"merchant-service/merchant"
-	merchpb "merchant-service/proto"
+	merchpb "gitlab.mapcard.pro/external-map-team/merchant-service/app/proto"
 )
 
 const defaultPort = "8080"

@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	merchpb "merchant-service/proto"
+	merchpb "gitlab.mapcard.pro/external-map-team/merchant-service/app/proto"
 
 	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
