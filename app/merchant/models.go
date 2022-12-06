@@ -113,5 +113,6 @@ type Terminal struct {
 	// Password
 	Password string
 	// Url
-	Url string
+	Url   string
+	Token string
 }

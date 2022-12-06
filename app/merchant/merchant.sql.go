@@ -126,15 +126,17 @@ INSERT INTO terminals (
   url,
   shop_id,
   login,
-  password
+  password,
+  token
 ) VALUES (
   $1, 
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
-RETURNING id, create_time, full_name, shop_id, login, password, url
+RETURNING id, create_time, full_name, shop_id, login, password, url, token
 `
 
 type AddTerminalParams struct {
@@ -143,6 +145,7 @@ type AddTerminalParams struct {
 	ShopID   pgtype.UUID
 	Login    string
 	Password string
+	Token    string
 }
 
 func (q *Queries) AddTerminal(ctx context.Context, arg AddTerminalParams) (Terminal, error) {
@@ -152,6 +155,7 @@ func (q *Queries) AddTerminal(ctx context.Context, arg AddTerminalParams) (Termi
 		arg.ShopID,
 		arg.Login,
 		arg.Password,
+		arg.Token,
 	)
 	var i Terminal
 	err := row.Scan(
@@ -162,6 +166,7 @@ func (q *Queries) AddTerminal(ctx context.Context, arg AddTerminalParams) (Termi
 		&i.Login,
 		&i.Password,
 		&i.Url,
+		&i.Token,
 	)
 	return i, err
 }
@@ -171,7 +176,7 @@ SELECT
   p.id as partner_id, p.full_name as partner_full_name, p.url as partner_url, p.role as partner_role,
 	m.id as merchant_id, m.full_name as merchant_full_name, m.url as merchant_url, 
 	s.id as shop_id, s.full_name as shop_full_name, s.url as shop_url,
-	t.id as terminal_id, t.full_name as terminal_full_name, t.url as terminal_url, t.login as termnal_login
+	t.id as terminal_id, t.full_name as terminal_full_name, t.url as terminal_url, t.login as terminal_login
 FROM 
 	terminals t, shops s, merchants m, partners p
 WHERE
@@ -206,7 +211,7 @@ type AuthRow struct {
 	TerminalID       pgtype.UUID
 	TerminalFullName string
 	TerminalUrl      string
-	TermnalLogin     string
+	TerminalLogin    string
 }
 
 func (q *Queries) Auth(ctx context.Context, arg AuthParams) (AuthRow, error) {
@@ -226,7 +231,7 @@ func (q *Queries) Auth(ctx context.Context, arg AuthParams) (AuthRow, error) {
 		&i.TerminalID,
 		&i.TerminalFullName,
 		&i.TerminalUrl,
-		&i.TermnalLogin,
+		&i.TerminalLogin,
 	)
 	return i, err
 }
@@ -294,7 +299,7 @@ func (q *Queries) DeleteShop(ctx context.Context, id pgtype.UUID) (Shop, error) 
 const deleteTerminal = `-- name: DeleteTerminal :one
 DELETE FROM terminals
 WHERE id = $1
-RETURNING id, create_time, full_name, shop_id, login, password, url
+RETURNING id, create_time, full_name, shop_id, login, password, url, token
 `
 
 func (q *Queries) DeleteTerminal(ctx context.Context, id pgtype.UUID) (Terminal, error) {
@@ -308,6 +313,7 @@ func (q *Queries) DeleteTerminal(ctx context.Context, id pgtype.UUID) (Terminal,
 		&i.Login,
 		&i.Password,
 		&i.Url,
+		&i.Token,
 	)
 	return i, err
 }

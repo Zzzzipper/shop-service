@@ -60,13 +60,15 @@ INSERT INTO terminals (
   url,
   shop_id,
   login,
-  password
+  password,
+  token
 ) VALUES (
   $1, 
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 RETURNING *;
 
@@ -80,7 +82,7 @@ SELECT
   p.id as partner_id, p.full_name as partner_full_name, p.url as partner_url, p.role as partner_role,
 	m.id as merchant_id, m.full_name as merchant_full_name, m.url as merchant_url, 
 	s.id as shop_id, s.full_name as shop_full_name, s.url as shop_url,
-	t.id as terminal_id, t.full_name as terminal_full_name, t.url as terminal_url, t.login as termnal_login
+	t.id as terminal_id, t.full_name as terminal_full_name, t.url as terminal_url, t.login as terminal_login
 FROM 
 	terminals t, shops s, merchants m, partners p
 WHERE

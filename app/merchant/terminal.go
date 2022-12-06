@@ -26,6 +26,7 @@ func (d Directory) AddTerminal(ctx context.Context, req *api.AddTerminalRequest)
 		ShopID:   shopID,
 		Login:    req.Login,
 		Password: req.Password,
+		Token:    req.Token,
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "unexpected error adding terminal: %s", err.Error())
@@ -57,6 +58,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 		"shop_id",
 		"login",
 		"password",
+		"token",
 	).From(
 		"terminals",
 	).OrderBy(
@@ -121,6 +123,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 			&pgTerminal.ShopID,
 			&pgTerminal.Password,
 			&pgTerminal.Login,
+			&pgTerminal.Token,
 		)
 		if err != nil {
 			return status.Error(codes.Internal, err.Error())
