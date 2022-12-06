@@ -86,6 +86,11 @@
           "format": "string",
           "description": "Опциональный параметр. Дополнительное описание ошибки"
         },
+        "Token": {
+          "type": "string",
+          "format": "string",
+          "description": "Код подтверждения авторизации"
+        },
         "TerminalInfo": {
           "$ref": "#/definitions/apiTerminal"
         },

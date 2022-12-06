@@ -97,6 +97,7 @@ CREATE TABLE public.terminals (
 	login text NOT NULL,
 	password text NOT NULL,
 	url text NOT NULL,
+	token text NOT NULL,
 	CONSTRAINT terminals_pk PRIMARY KEY (id)
 );
 -- ddl-end --
