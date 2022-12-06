@@ -150,7 +150,9 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*api.SellerInfo, error) {
 	fmt.Println(pgSellerinfo.TerminalID.Status)
 	if pgSellerinfo.TerminalID.Status == pgtype.Undefined {
 		return &api.SellerInfo{
-			Status: false,
+			Success:    false,
+			ErrCode:    "NOT_FOUND",
+			ErrMessage: "Не найдено: терминал",
 		}, nil
 
 	}
@@ -179,7 +181,7 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*api.SellerInfo, error) {
 		return nil, status.Errorf(codes.Internal, "failed to assign terminal UUID to string: %s", err.Error())
 	}
 	return &api.SellerInfo{
-		Status: true,
+		Success: true,
 		PartnerInfo: &api.Partner{
 			Id:       partnerID,
 			FullName: pgSellerinfo.PartnerFullName,
@@ -200,6 +202,7 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*api.SellerInfo, error) {
 			Id:       terminalID,
 			FullName: pgSellerinfo.TerminalFullName,
 			Url:      pgSellerinfo.TerminalUrl,
+			Login:    pgSellerinfo.TermnalLogin,
 		},
 	}, nil
 }
