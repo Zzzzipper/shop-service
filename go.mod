@@ -17,7 +17,7 @@ require (
 	github.com/ory/dockertest/v3 v3.6.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/soheilhy/cmux v0.1.5
-	gitlab.mapcard.pro/external-map-team/api-proto v1.0.40
+	gitlab.mapcard.pro/external-map-team/api-proto v1.0.46
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20211117183948-ae814b36b871 // indirect
 	google.golang.org/grpc v1.50.1
