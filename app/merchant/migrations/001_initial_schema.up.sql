@@ -118,30 +118,6 @@ COMMENT ON COLUMN public.terminals.url IS E'Url';
 ALTER TABLE public.terminals OWNER TO postgres;
 -- ddl-end --
 
--- object: public.buyers | type: TABLE --
-DROP TABLE IF EXISTS public.buyers CASCADE;
-CREATE TABLE public.buyers (
-	id uuid NOT NULL DEFAULT gen_random_uuid(),
-	full_name text NOT NULL,
-	create_time timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	email text NOT NULL,
-	phone text NOT NULL,
-	first_name text NOT NULL,
-	last_name text NOT NULL,
-	middle_name text NOT NULL,
-	birth date NOT NULL,
-	street text NOT NULL,
-	address text NOT NULL,
-	city text NOT NULL,
-	country text NOT NULL,
-	postcode integer NOT NULL,
-	ext_id uuid DEFAULT gen_random_uuid(),
-	CONSTRAINT buyers_pk PRIMARY KEY (id)
-);
--- ddl-end --
-ALTER TABLE public.buyers OWNER TO postgres;
--- ddl-end --
-
 -- object: public.schema_migrations | type: TABLE --
 DROP TABLE IF EXISTS public.schema_migrations CASCADE;
 CREATE TABLE public.schema_migrations (
@@ -173,3 +149,25 @@ ALTER TABLE public.terminals ADD CONSTRAINT terminal_shop_fk FOREIGN KEY (shop_i
 REFERENCES public.shops (id) MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
+
+INSERT INTO public.partners(
+	id, create_time, full_name, url, api_token, role)
+	VALUES ('b6f97e90-29b4-4c99-a5a5-dede07629932', '2022-12-06 17:45:15.913909+00', 'partner_1', '', 'f7c92f94-a3ac-40f8-a74f-c7d03247a698', 'base_partner');
+	
+INSERT INTO public.merchants(
+	id, create_time, full_name, url, partner_id)
+	VALUES ('57967ad6-8b75-4362-9d79-c4a0f4b42d84', '2022-12-06 17:45:34.011838+00', 'merchant_1', '', 'b6f97e90-29b4-4c99-a5a5-dede07629932');
+	
+INSERT INTO public.shops(
+	id, create_time, full_name, merchant_id, login, password, url)
+	VALUES ('4f63e896-d776-4511-9b4c-d98753a22fdb', '2022-12-06 17:45:52.115621+00', 'shop_1', '57967ad6-8b75-4362-9d79-c4a0f4b42d84', '', '', '');
+
+INSERT INTO public.terminals(
+	id, create_time, full_name, shop_id, login, password, url, token)
+	VALUES ('0cf51482-7a1c-48c9-9d41-a6053da3ac89', '2022-12-06 17:52:56.482736+00', 'terminal_1', '4f63e896-d776-4511-9b4c-d98753a22fdb', 'user', '1234', '', '');
+	
+INSERT INTO public.schema_migrations(
+	version, dirty)
+	VALUES (1, false);
+	
+	

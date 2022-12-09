@@ -11,7 +11,7 @@ services:
     build: 
       context: .
       args:
-        GITLAB_DEPENDENCIES_TOKEN: ${GITLAB_DEPENDENCIES_TOKEN}
+        API_PROTO_DEPENDENCIES_TOKEN: ${API_PROTO_DEPENDENCIES_TOKEN}
     ports:
       - 8080:8080
     restart: on-failure
