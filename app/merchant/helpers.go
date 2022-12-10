@@ -26,7 +26,7 @@ var fs embed.FS
 
 // version defines the current migration version. This ensures the app
 // is always compatible with the version of the database.
-const version = 3
+const version = 1
 
 // Migrate migrates the Postgres schema to the current version.
 func validateSchema(db *sql.DB, scheme string) error {
