@@ -1,7 +1,7 @@
 CREATE TYPE public.role AS
 ENUM ('base_partner','partner','admin','guest');
 
-ALTER TYPE public.role OWNER TO postgres;
+ALTER TYPE public.role OWNER TO merchant_user;
 
 CREATE TABLE public.partners (
 	id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -19,7 +19,7 @@ COMMENT ON COLUMN public.partners.full_name IS E'Full name';
 COMMENT ON COLUMN public.partners.url IS E'Url';
 COMMENT ON COLUMN public.partners.api_token IS E'Partner API token';
 COMMENT ON COLUMN public.partners.role IS E'Role';
-ALTER TABLE public.partners OWNER TO postgres;
+ALTER TABLE public.partners OWNER TO merchant_user;
 
 CREATE TABLE public.shops (
 	id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -39,7 +39,7 @@ COMMENT ON COLUMN public.shops.merchant_id IS E'Parent merchant id';
 COMMENT ON COLUMN public.shops.login IS E'Login phrase';
 COMMENT ON COLUMN public.shops.password IS E'Password';
 COMMENT ON COLUMN public.shops.url IS E'Url';
-ALTER TABLE public.shops OWNER TO postgres;
+ALTER TABLE public.shops OWNER TO merchant_user;
 
 CREATE TABLE public.merchants (
 	id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -55,7 +55,7 @@ COMMENT ON COLUMN public.merchants.create_time IS E'Tiemestamp of creation';
 COMMENT ON COLUMN public.merchants.full_name IS E'Full name';
 COMMENT ON COLUMN public.merchants.url IS E'Url';
 COMMENT ON COLUMN public.merchants.partner_id IS E'Parent partner id';
-ALTER TABLE public.merchants OWNER TO postgres;
+ALTER TABLE public.merchants OWNER TO merchant_user;
 
 CREATE TABLE public.terminals (
 	id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -76,7 +76,7 @@ COMMENT ON COLUMN public.terminals.shop_id IS E'Parent shop id';
 COMMENT ON COLUMN public.terminals.login IS E'Login phrase';
 COMMENT ON COLUMN public.terminals.password IS E'Password';
 COMMENT ON COLUMN public.terminals.url IS E'Url';
-ALTER TABLE public.terminals OWNER TO postgres;
+ALTER TABLE public.terminals OWNER TO merchant_user;
 
 ALTER TABLE public.shops ADD CONSTRAINT shops_merchant_fk FOREIGN KEY (merchant_id)
 REFERENCES public.merchants (id) MATCH FULL
