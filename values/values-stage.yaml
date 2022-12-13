@@ -71,7 +71,7 @@ ingress:
       paths:
         - path: /api/merchant/?(.*)
           pathType: Prefix
-          servicePort: 8000
+          servicePort: 8080
   tls:
    - secretName: tls-mc-secret
      hosts:
