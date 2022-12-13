@@ -108,4 +108,5 @@ affinity: {}
 
 envConfig:
   API_SECRET: "98hbun98h"
+  PORT: "8080"
 

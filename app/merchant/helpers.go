@@ -9,7 +9,6 @@ import (
 
 	migrate "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database"
-	"github.com/golang-migrate/migrate/v4/database/cockroachdb"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jackc/pgtype"
@@ -38,8 +37,6 @@ func validateSchema(db *sql.DB, scheme string) error {
 	switch scheme {
 	case "postgres", "postgresql":
 		driverInstance, err = postgres.WithInstance(db, new(postgres.Config))
-	case "cockroachdb":
-		driverInstance, err = cockroachdb.WithInstance(db, new(cockroachdb.Config))
 	default:
 		return fmt.Errorf("unknown scheme: %q", scheme)
 	}

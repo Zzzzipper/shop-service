@@ -58,11 +58,6 @@ type Partner struct {
 	Role Role
 }
 
-type SchemaMigration struct {
-	Version int64
-	Dirty   bool
-}
-
 type Shop struct {
 	// Shop unique id
 	ID pgtype.UUID
