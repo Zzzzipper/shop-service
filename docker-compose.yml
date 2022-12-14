@@ -13,7 +13,7 @@ services:
       args:
         API_PROTO_DEPENDENCIES_TOKEN: ${API_PROTO_DEPENDENCIES_TOKEN}
     ports:
-      - 8080:8080
+      - 8081:8081
     restart: on-failure
     volumes:
       - api:/usr/src/app/
@@ -31,7 +31,7 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - DATABASE_HOST=${DB_HOST}
     ports:
-      - '5432:5432'
+      - '5431:5431'
     volumes:
       - database_postgres:/var/lib/postgresql/data
     networks:
