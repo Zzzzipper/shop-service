@@ -110,4 +110,10 @@ affinity: {}
 envConfig:
   API_SECRET: "98hbun98h"
   PORT: "8080"
+  DB_HOST: "fullstack-postgres"
+  DB_DRIVER: "postgres"
+  DB_USER: "merchant_user"
+  DB_PASSWORD: "gkLks6AABKcIrivF"
+  DB_NAME: "merchant"
+  DB_PORT: "5432"
 
