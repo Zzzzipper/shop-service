@@ -312,5 +312,7 @@ func CreateURL_FromEnvParts() (string, error) {
 		pgDbName,
 	)
 
+	Log().format("Postgres URL: %s\n", pgUrl)
+
 	return pgUrl, nil
 }

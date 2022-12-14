@@ -1,6 +1,6 @@
 module gitlab.mapcard.pro/external-map-team/merchant-service
 
-go 1.16
+go 1.18
 
 require (
 	github.com/Masterminds/squirrel v1.5.1

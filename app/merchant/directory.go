@@ -39,7 +39,8 @@ func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
 	err = validateSchema(db, pgURL.Scheme)
 	if err != nil {
-		return nil, fmt.Errorf("validating schema: %w", err)
+		Log().format("NewDirectory validateSchema error: %s\n", err.Error())
+		return nil, fmt.Errorf("validating schema: %s", err.Error())
 	}
 
 	return &Directory{
