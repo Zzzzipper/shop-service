@@ -23,13 +23,8 @@ type Directory struct {
 // NewDirectory creates a new Directory, connecting it to the postgres server on
 // the URL provided.
 func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
-	connURL := *pgURL
-	if connURL.Scheme == "cockroachdb" {
-		// Overwrite the scheme before parsing with pgx, since
-		// it doesn't support the "cockroachdb" scheme.
-		connURL.Scheme = "merchant"
-	}
-	c, err := pgx.ParseConfig(connURL.String())
+
+	c, err := pgx.ParseConfig(pgURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("parsing merchant URI: %w", err)
 	}

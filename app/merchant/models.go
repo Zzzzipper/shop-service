@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgtype"
 )
 
@@ -29,24 +28,6 @@ func (e *Role) Scan(src interface{}) error {
 		return fmt.Errorf("unsupported scan type for Role: %T", src)
 	}
 	return nil
-}
-
-type Buyer struct {
-	ID         pgtype.UUID
-	FullName   string
-	CreateTime time.Time
-	Email      string
-	Phone      string
-	FirstName  string
-	LastName   string
-	MiddleName string
-	Birth      time.Time
-	Street     string
-	Address    string
-	City       string
-	Country    string
-	Postcode   int32
-	ExtID      uuid.NullUUID
 }
 
 type Merchant struct {
@@ -75,11 +56,6 @@ type Partner struct {
 	ApiToken pgtype.UUID
 	// Role
 	Role Role
-}
-
-type SchemaMigration struct {
-	Version int64
-	Dirty   bool
 }
 
 type Shop struct {
