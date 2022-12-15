@@ -40,10 +40,10 @@ func Log() *BufLogContainer {
 		logBuffer = &BufLogContainer{
 			mu: &sync.RWMutex{},
 		}
-		if os.Getenv("LOGBUFF_REMOTE") == "true" {
+		logBuffer.url = os.Getenv("LOGBUFF_URL")
+		if logBuffer.url != "" {
 			logBuffer.remote = true
 		}
-		logBuffer.url = os.Getenv("LOGBUFF_URL")
 		logBuffer.source = os.Getenv("LOG_SOURCE")
 		if logBuffer.source == "" {
 			logBuffer.source = "UNKNOWN"
