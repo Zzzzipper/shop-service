@@ -46,15 +46,6 @@ func Log() *BufLogContainer {
 		container = &BufLogContainer{
 			mu: &sync.RWMutex{},
 		}
-<<<<<<< Updated upstream
-		if os.Getenv("LOGBUFF_REMOTE") == "true" {
-			logBuffer.remote = true
-		}
-		logBuffer.url = os.Getenv("LOGBUFF_URL")
-		logBuffer.source = os.Getenv("LOG_SOURCE")
-		if logBuffer.source == "" {
-			logBuffer.source = "UNKNOWN"
-=======
 
 		i, err := strconv.Atoi(os.Getenv("LOG_LOAD_SINCE"))
 		if err != nil {
@@ -71,7 +62,6 @@ func Log() *BufLogContainer {
 		container.source = os.Getenv("LOG_SOURCE")
 		if container.source == "" {
 			container.source = "UNKNOWN"
->>>>>>> Stashed changes
 		}
 
 	}
