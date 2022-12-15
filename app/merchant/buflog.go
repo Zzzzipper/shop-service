@@ -17,9 +17,9 @@ const (
 )
 
 type LogLine struct {
-	line   string
-	time   time.Time
-	source string
+	Line   string    `json:"line"`
+	Time   time.Time `json:"createdSince"`
+	Source string    `json:"source"`
 }
 
 type BufLogContainer struct {
@@ -56,6 +56,9 @@ func Log() *BufLogContainer {
 // Send - send string line to srever
 //
 func (l *BufLogContainer) send(line LogLine) error {
+
+	fmt.Printf("LogLine to BufLog send: %v\n", line)
+
 	body, err := json.Marshal(line)
 
 	if err != nil {
@@ -63,8 +66,10 @@ func (l *BufLogContainer) send(line LogLine) error {
 		return err
 	}
 
+	fmt.Printf("Body to BufLog send: %v\n", string(body))
+
 	bodyReader := bytes.NewReader(body)
-	req, err := http.NewRequest(http.MethodPost, l.url, bodyReader)
+	req, err := http.NewRequest(http.MethodPost, strings.TrimSpace(l.url), bodyReader)
 	if err != nil {
 		fmt.Printf("BufLog: could not create request: %s\n", err)
 		return err
@@ -93,13 +98,14 @@ func (l *BufLogContainer) putString(in LogLine) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	if strings.Contains(in.line, "/GetLog") {
+	if strings.Contains(in.Line, "/GetLog") ||
+		strings.Contains(in.Line, "/Log") {
 		return
 	}
 
-	fmt.Println(in.line)
+	fmt.Printf("LogLine in putString: %v\n", in)
 
-	in.source = l.source
+	in.Source = l.source
 
 	if l.len() > logBufSize {
 		l.buffer = append(l.buffer[:0], l.buffer[1:]...)
@@ -116,8 +122,9 @@ func (l *BufLogContainer) putString(in LogLine) {
 //
 func (l *BufLogContainer) format(format string, a ...any) {
 	l.putString(LogLine{
-		line: fmt.Sprintf(format, a...),
-		time: time.Now(),
+		Line:   fmt.Sprintf(format, a...),
+		Time:   time.Now(),
+		Source: l.source,
 	})
 }
 
@@ -126,8 +133,9 @@ func (l *BufLogContainer) format(format string, a ...any) {
 //
 func (l *BufLogContainer) line(a ...any) {
 	l.putString(LogLine{
-		line: fmt.Sprintln(a...),
-		time: time.Now(),
+		Line:   fmt.Sprintln(a...),
+		Time:   time.Now(),
+		Source: l.source,
 	})
 }
 

@@ -24,6 +24,8 @@ type Directory struct {
 // the URL provided.
 func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
+	Log().format("Start NewDirectory, Postgres URL: %v\n", pgURL)
+
 	c, err := pgx.ParseConfig(pgURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("parsing merchant URI: %w", err)
