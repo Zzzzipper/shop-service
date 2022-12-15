@@ -116,6 +116,6 @@ envConfig:
   DB_PASSWORD: "gkLks6AABKcIrivF"
   DB_NAME: "merchant"
   DB_PORT: "5432"
-  LOGBUFF_URL: "https://api-rest-stage.mapcard.pro/api/v1/log"
+  LOGBUFF_URL: http://payments-api/api/v1/log
   LOG_SOURCE: "MERCHANT"
 
