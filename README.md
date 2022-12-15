@@ -23,16 +23,6 @@ $ POSTGRES_URL=postgresql://postgres:mypass@localhost:5432/postgres?sslmode=disa
 
 ![gRPCUI](./grpcui.png)
 
-## Использование Cockroach DB
-
-Сервис так же поддерживает обмен с инстансом Cockroach DB, с использованием `cockroachdb` схемы:
-
-```
-cockroachdb://user:password@host:5432/defaultdb
-```
-
-Эта схема используется для повышения ээфективности миграций баз данных, по мере изменения поведения в зависимости от базы данных.
-
 ## Разработка
 
 ### Требования

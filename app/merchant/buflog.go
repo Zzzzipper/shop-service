@@ -6,9 +6,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -17,39 +21,51 @@ const (
 )
 
 type LogLine struct {
+	Code   uint32    `json:"code"`
 	Line   string    `json:"line"`
 	Time   time.Time `json:"createdSince"`
 	Source string    `json:"source"`
 }
 
 type BufLogContainer struct {
-	buffer []LogLine
-	remote bool
-	url    string
-	source string
-	mu     *sync.RWMutex
+	buffer       []LogLine
+	remote       bool
+	url          string
+	source       string
+	mu           *sync.RWMutex
+	logLoadSince int
 }
 
-var logBuffer *BufLogContainer
+var container *BufLogContainer
 
 //
 // New - singleton constructor
 //
 func Log() *BufLogContainer {
-	if logBuffer == nil {
-		logBuffer = &BufLogContainer{
+	if container == nil {
+		container = &BufLogContainer{
 			mu: &sync.RWMutex{},
 		}
-		logBuffer.url = os.Getenv("LOGBUFF_URL")
-		if logBuffer.url != "" {
-			logBuffer.remote = true
+
+		i, err := strconv.Atoi(os.Getenv("LOG_LOAD_SINCE"))
+		if err != nil {
+			container.logLoadSince = 60
+		} else {
+			container.logLoadSince = i
 		}
-		logBuffer.source = os.Getenv("LOG_SOURCE")
-		if logBuffer.source == "" {
-			logBuffer.source = "UNKNOWN"
+
+		container.url = os.Getenv("LOGBUFF_URL")
+		if container.url != "" {
+			container.remote = true
 		}
+
+		container.source = os.Getenv("LOG_SOURCE")
+		if container.source == "" {
+			container.source = "UNKNOWN"
+		}
+
 	}
-	return logBuffer
+	return container
 }
 
 //
@@ -98,14 +114,7 @@ func (l *BufLogContainer) putString(in LogLine) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	if strings.Contains(in.Line, "/GetLog") ||
-		strings.Contains(in.Line, "/Log") {
-		return
-	}
-
 	fmt.Printf("LogLine in putString: %v\n", in)
-
-	in.Source = l.source
 
 	if l.len() > logBufSize {
 		l.buffer = append(l.buffer[:0], l.buffer[1:]...)
@@ -137,6 +146,47 @@ func (l *BufLogContainer) line(a ...any) {
 		Time:   time.Now(),
 		Source: l.source,
 	})
+}
+
+//
+// errorf  - printf error and return it
+//
+func (l *BufLogContainer) errorf(format string, a ...any) error {
+	l.putString(LogLine{
+		Line:   fmt.Sprintf(format, a...),
+		Time:   time.Now(),
+		Source: l.source,
+	})
+
+	return fmt.Errorf(format, a...)
+}
+
+//
+// statusErrorf  - printf error with return code and return it
+//
+func (l *BufLogContainer) statusErrorf(code codes.Code, format string, a ...any) error {
+	l.putString(LogLine{
+		Code:   uint32(code),
+		Line:   fmt.Sprintf(format, a...),
+		Time:   time.Now(),
+		Source: l.source,
+	})
+
+	return status.Errorf(code, format, a...)
+}
+
+//
+// statusError  - printf error with return code and return it
+//
+func (l *BufLogContainer) statusError(code codes.Code, a string) error {
+	l.putString(LogLine{
+		Code:   uint32(code),
+		Line:   fmt.Sprintln(a),
+		Time:   time.Now(),
+		Source: l.source,
+	})
+
+	return status.Error(code, a)
 }
 
 //
