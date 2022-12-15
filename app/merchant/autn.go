@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	"gitlab.mapcard.pro/external-map-team/api-proto/merchant/api"
 )
@@ -18,11 +17,11 @@ func (d Directory) Auth(ctx context.Context, req *api.AuthRequest) (*api.SellerI
 	}
 	sellerInfo, err := d.querier.Auth(ctx, authRequest)
 	if err != nil {
-		Log().format("Erroe Auth: %s\n", err.Error())
+		Log().format("Error Auth: %s\n", err.Error())
 		if strings.Contains(err.Error(), "no rows in result set") {
 			return authinfoPostgresToProto(AuthRow{})
 		} else {
-			return nil, status.Errorf(codes.Internal, "Unexpected error select auth: %s", err.Error())
+			return nil, Log().statusErrorf(codes.Internal, "Unexpected error select auth: %s", err.Error())
 		}
 	}
 

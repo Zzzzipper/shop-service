@@ -6,7 +6,6 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgtype"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	merchpb "gitlab.mapcard.pro/external-map-team/merchant-service/app/proto"
 
@@ -25,7 +24,7 @@ func (d Directory) AddPartner(ctx context.Context, req *api.AddPartnerRequest) (
 		Role:     pgRole,
 	})
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error adding partner: %s", err.Error())
+		return nil, Log().statusErrorf(codes.Internal, "Unexpected error adding partner: %s", err.Error())
 	}
 	return partnerPostgresToProto(pgPartner)
 }
@@ -35,7 +34,7 @@ func (d Directory) DeletePartner(ctx context.Context, req *api.DeletePartnerRequ
 	var partnerID pgtype.UUID
 	err := partnerID.Set(req.GetId())
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid UUID provided")
+		return nil, Log().statusError(codes.InvalidArgument, "Invalid UUID provided")
 	}
 	pgPartner, err := d.querier.DeletePartner(ctx, partnerID)
 	if err != nil {
@@ -63,7 +62,7 @@ func (d Directory) ListPartners(req *api.ListPartnersRequest, srv merchpb.Mercha
 		var pgTime pgtype.Timestamptz
 		err := pgTime.Set(req.GetCreatedSince().AsTime())
 		if err != nil {
-			return status.Errorf(codes.InvalidArgument, "invalid timestamp: %s", err.Error())
+			return Log().statusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
 		}
 		q = q.Where(squirrel.Gt{
 			"create_time": pgTime,
@@ -74,7 +73,7 @@ func (d Directory) ListPartners(req *api.ListPartnersRequest, srv merchpb.Mercha
 		var pgInterval pgtype.Interval
 		err := pgInterval.Set(req.GetOlderThan().AsDuration())
 		if err != nil {
-			return status.Errorf(codes.InvalidArgument, "invalid duration: %s", err.Error())
+			return Log().statusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -85,12 +84,12 @@ func (d Directory) ListPartners(req *api.ListPartnersRequest, srv merchpb.Mercha
 
 	rows, retErr := q.QueryContext(srv.Context())
 	if retErr != nil {
-		return status.Error(codes.Internal, retErr.Error())
+		return Log().statusError(codes.Internal, retErr.Error())
 	}
 	defer func() {
 		cerr := rows.Close()
 		if retErr == nil && cerr != nil {
-			retErr = status.Error(codes.Internal, cerr.Error())
+			retErr = Log().statusError(codes.Internal, cerr.Error())
 		}
 	}()
 
@@ -105,7 +104,7 @@ func (d Directory) ListPartners(req *api.ListPartnersRequest, srv merchpb.Mercha
 			&pgPartner.Role,
 		)
 		if err != nil {
-			return status.Error(codes.Internal, err.Error())
+			return Log().statusError(codes.Internal, err.Error())
 		}
 		protoPartner, err := partnerPostgresToProto(pgPartner)
 		if err != nil {
@@ -113,13 +112,13 @@ func (d Directory) ListPartners(req *api.ListPartnersRequest, srv merchpb.Mercha
 		}
 		err = srv.Send(protoPartner)
 		if err != nil {
-			return status.Error(codes.Internal, err.Error())
+			return Log().statusError(codes.Internal, err.Error())
 		}
 	}
 
 	retErr = rows.Err()
 	if retErr != nil {
-		return status.Error(codes.Internal, retErr.Error())
+		return Log().statusError(codes.Internal, retErr.Error())
 	}
 
 	return nil

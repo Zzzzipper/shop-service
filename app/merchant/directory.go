@@ -28,6 +28,7 @@ func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
 	c, err := pgx.ParseConfig(pgURL.String())
 	if err != nil {
+		Log().format("Error parsing merchant URI: %v\n", err)
 		return nil, fmt.Errorf("parsing merchant URI: %w", err)
 	}
 
