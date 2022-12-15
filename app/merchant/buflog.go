@@ -114,11 +114,6 @@ func (l *BufLogContainer) putString(in LogLine) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	if strings.Contains(in.Line, "/GetLog") ||
-		strings.Contains(in.Line, "/Log") {
-		return
-	}
-
 	fmt.Printf("LogLine in putString: %v\n", in)
 
 	if l.len() > logBufSize {
@@ -162,6 +157,7 @@ func (l *BufLogContainer) errorf(format string, a ...any) error {
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return fmt.Errorf(format, a...)
 }
 
@@ -175,6 +171,7 @@ func (l *BufLogContainer) statusErrorf(code codes.Code, format string, a ...any)
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return status.Errorf(code, format, a...)
 }
 
@@ -188,6 +185,7 @@ func (l *BufLogContainer) statusError(code codes.Code, a string) error {
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return status.Error(code, a)
 }
 
