@@ -17,7 +17,7 @@ func (d Directory) AddMerchant(ctx context.Context, req *api.AddMerchantRequest)
 	var partnerID pgtype.UUID
 	err := partnerID.Set(req.GetPartnerId())
 	if err != nil {
-		return nil, Log().statusError(codes.InvalidArgument, "Invalid partner UUID provided")
+		return nil, Log().StatusError(codes.InvalidArgument, "Invalid partner UUID provided")
 	}
 	pgMerchant, err := d.querier.AddMerchant(ctx, AddMerchantParams{
 		FullName:  req.FullName,
@@ -25,7 +25,7 @@ func (d Directory) AddMerchant(ctx context.Context, req *api.AddMerchantRequest)
 		PartnerID: partnerID,
 	})
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Unexpected error adding merchant: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Unexpected error adding merchant: %s", err.Error())
 	}
 	return merchantPostgresToProto(pgMerchant)
 }
@@ -35,7 +35,7 @@ func (d Directory) DeleteMerchant(ctx context.Context, req *api.DeleteMerchantRe
 	var merchantID pgtype.UUID
 	err := merchantID.Set(req.GetId())
 	if err != nil {
-		return nil, Log().statusError(codes.InvalidArgument, "Invalid merchant UUID provided")
+		return nil, Log().StatusError(codes.InvalidArgument, "Invalid merchant UUID provided")
 	}
 	pgMerchant, err := d.querier.DeleteMerchant(ctx, merchantID)
 	if err != nil {
@@ -62,7 +62,7 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 		var pgTime pgtype.Timestamptz
 		err := pgTime.Set(req.GetCreatedSince().AsTime())
 		if err != nil {
-			return Log().statusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
 		}
 		q = q.Where(squirrel.Gt{
 			"create_time": pgTime,
@@ -73,7 +73,7 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 		var pgInterval pgtype.Interval
 		err := pgInterval.Set(req.GetOlderThan().AsDuration())
 		if err != nil {
-			return Log().statusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -86,7 +86,7 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 		var merchantID pgtype.UUID
 		err := merchantID.Set(req.GetPartnerId())
 		if err != nil {
-			return Log().statusError(codes.InvalidArgument, "Invalid partner UUID provided")
+			return Log().StatusError(codes.InvalidArgument, "Invalid partner UUID provided")
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -97,12 +97,12 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 
 	rows, retErr := q.QueryContext(srv.Context())
 	if retErr != nil {
-		return Log().statusError(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 	defer func() {
 		cerr := rows.Close()
 		if retErr == nil && cerr != nil {
-			retErr = Log().statusError(codes.Internal, cerr.Error())
+			retErr = Log().StatusError(codes.Internal, cerr.Error())
 		}
 	}()
 
@@ -116,7 +116,7 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 			&pgMerchant.PartnerID,
 		)
 		if err != nil {
-			return Log().statusError(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 		protoMerchant, err := merchantPostgresToProto(pgMerchant)
 		if err != nil {
@@ -124,13 +124,13 @@ func (d Directory) ListMerchants(req *api.ListMerchantsRequest, srv merchpb.Merc
 		}
 		err = srv.Send(protoMerchant)
 		if err != nil {
-			return Log().statusError(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 	}
 
 	retErr = rows.Err()
 	if retErr != nil {
-		return Log().statusError(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 
 	return nil

@@ -2,7 +2,6 @@ package merchant
 
 import (
 	"database/sql"
-	"fmt"
 	"net/url"
 
 	"github.com/Masterminds/squirrel"
@@ -24,12 +23,12 @@ type Directory struct {
 // the URL provided.
 func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
-	Log().format("Start NewDirectory, Postgres URL: %v\n", pgURL)
+	Log().Format("Start NewDirectory, Postgres URL: %v\n", pgURL)
 
 	c, err := pgx.ParseConfig(pgURL.String())
 	if err != nil {
-		Log().format("Error parsing merchant URI: %v\n", err)
-		return nil, fmt.Errorf("parsing merchant URI: %w", err)
+		Log().Format("Error parsing merchant URI: %v\n", err)
+		return nil, Log().Errorf("Parsing merchant URI: %v", err)
 	}
 
 	c.Logger = logrusadapter.NewLogger(logger)
@@ -37,8 +36,8 @@ func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
 	err = validateSchema(db, pgURL.Scheme)
 	if err != nil {
-		Log().format("NewDirectory validateSchema error: %s\n", err.Error())
-		return nil, fmt.Errorf("validating schema: %s", err.Error())
+		Log().Format("NewDirectory validateSchema error: %s\n", err.Error())
+		return nil, Log().Errorf("Validating schema: %s", err.Error())
 	}
 
 	return &Directory{
