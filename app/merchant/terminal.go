@@ -17,7 +17,7 @@ func (d Directory) AddTerminal(ctx context.Context, req *api.AddTerminalRequest)
 	var shopID pgtype.UUID
 	err := shopID.Set(req.GetShopId())
 	if err != nil {
-		return nil, Log().statusError(codes.InvalidArgument, "Invalid shop UUID provided")
+		return nil, Log().StatusError(codes.InvalidArgument, "Invalid shop UUID provided")
 	}
 	pgTerminal, err := d.querier.AddTerminal(ctx, AddTerminalParams{
 		FullName: req.FullName,
@@ -28,7 +28,7 @@ func (d Directory) AddTerminal(ctx context.Context, req *api.AddTerminalRequest)
 		Token:    req.Token,
 	})
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Unexpected error adding terminal: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Unexpected error adding terminal: %s", err.Error())
 	}
 	return terminalPostgresToProto(pgTerminal)
 }
@@ -38,7 +38,7 @@ func (d Directory) DeleteTerminal(ctx context.Context, req *api.DeleteTerminalRe
 	var terminalID pgtype.UUID
 	err := terminalID.Set(req.GetId())
 	if err != nil {
-		return nil, Log().statusError(codes.InvalidArgument, "Invalid terminal UUID provided")
+		return nil, Log().StatusError(codes.InvalidArgument, "Invalid terminal UUID provided")
 	}
 	pgTerminal, err := d.querier.DeleteTerminal(ctx, terminalID)
 	if err != nil {
@@ -68,7 +68,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 		var pgTime pgtype.Timestamptz
 		err := pgTime.Set(req.GetCreatedSince().AsTime())
 		if err != nil {
-			return Log().statusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
 		}
 		q = q.Where(squirrel.Gt{
 			"create_time": pgTime,
@@ -79,7 +79,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 		var pgInterval pgtype.Interval
 		err := pgInterval.Set(req.GetOlderThan().AsDuration())
 		if err != nil {
-			return Log().statusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -92,7 +92,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 		var merchantID pgtype.UUID
 		err := merchantID.Set(req.GetShopId())
 		if err != nil {
-			return Log().statusError(codes.InvalidArgument, "Invalid shop UUID provided")
+			return Log().StatusError(codes.InvalidArgument, "Invalid shop UUID provided")
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -103,12 +103,12 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 
 	rows, retErr := q.QueryContext(srv.Context())
 	if retErr != nil {
-		return Log().statusError(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 	defer func() {
 		cerr := rows.Close()
 		if retErr == nil && cerr != nil {
-			retErr = Log().statusError(codes.Internal, cerr.Error())
+			retErr = Log().StatusError(codes.Internal, cerr.Error())
 		}
 	}()
 
@@ -125,7 +125,7 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 			&pgTerminal.Token,
 		)
 		if err != nil {
-			return Log().statusError(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 		protoTerminal, err := terminalPostgresToProto(pgTerminal)
 		if err != nil {
@@ -133,13 +133,13 @@ func (d Directory) ListTerminals(req *api.ListTerminalsRequest, srv merchpb.Merc
 		}
 		err = srv.Send(protoTerminal)
 		if err != nil {
-			return Log().statusError(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 	}
 
 	retErr = rows.Err()
 	if retErr != nil {
-		return Log().statusError(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 
 	return nil

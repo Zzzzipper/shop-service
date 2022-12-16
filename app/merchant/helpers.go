@@ -61,12 +61,12 @@ func partnerPostgresToProto(pgPartner Partner) (*api.Partner, error) {
 	var userID string
 	err = pgPartner.ID.AssignTo(&userID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign UUID to string: %s", err.Error())
 	}
 	var apiToken string
 	err = pgPartner.ApiToken.AssignTo(&apiToken)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign Api token to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign Api token to string: %s", err.Error())
 	}
 	return &api.Partner{
 		Id:         userID,
@@ -82,12 +82,12 @@ func merchantPostgresToProto(pgMerchant Merchant) (*api.Merchant, error) {
 	var merchantID string
 	err := pgMerchant.ID.AssignTo(&merchantID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
 	}
 	var partnerID string
 	err = pgMerchant.PartnerID.AssignTo(&partnerID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign partner UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign partner UUID to string: %s", err.Error())
 	}
 	return &api.Merchant{
 		Id:         merchantID,
@@ -102,12 +102,12 @@ func shopPostgresToProto(pgShop Shop) (*api.Shop, error) {
 	var shopID string
 	err := pgShop.ID.AssignTo(&shopID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
 	}
 	var merchantID string
 	err = pgShop.MerchantID.AssignTo(&merchantID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
 	}
 	return &api.Shop{
 		Id:         shopID,
@@ -124,12 +124,12 @@ func terminalPostgresToProto(pgTerminal Terminal) (*api.Terminal, error) {
 	var terminalID string
 	err := pgTerminal.ID.AssignTo(&terminalID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign terminal UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign terminal UUID to string: %s", err.Error())
 	}
 	var shopID string
 	err = pgTerminal.ShopID.AssignTo(&shopID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
 	}
 	return &api.Terminal{
 		Id:         shopID,
@@ -159,22 +159,22 @@ func authinfoPostgresToProto(pgSellerinfo AuthRow) (*api.SellerInfo, error) {
 	var partnerID string
 	err = pgSellerinfo.PartnerID.AssignTo(&partnerID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign partner UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign partner UUID to string: %s", err.Error())
 	}
 	var merchantID string
 	err = pgSellerinfo.MerchantID.AssignTo(&merchantID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign merchant UUID to string: %s", err.Error())
 	}
 	var shopID string
 	err = pgSellerinfo.ShopID.AssignTo(&shopID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign shop UUID to string: %s", err.Error())
 	}
 	var terminalID string
 	err = pgSellerinfo.TerminalID.AssignTo(&terminalID)
 	if err != nil {
-		return nil, Log().statusErrorf(codes.Internal, "Failed to assign terminal UUID to string: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to assign terminal UUID to string: %s", err.Error())
 	}
 	return &api.SellerInfo{
 		Success: true,
@@ -214,7 +214,7 @@ func rolePostgresToProto(pgRole Role) (api.Role, error) {
 	case RoleGuest:
 		return api.Role_GUEST, nil
 	default:
-		return 0, Log().statusErrorf(codes.Internal, "Unknown role type %q", pgRole)
+		return 0, Log().StatusErrorf(codes.Internal, "Unknown role type %q", pgRole)
 	}
 }
 
@@ -229,7 +229,7 @@ func roleProtoToPostgres(pbRole api.Role) (Role, error) {
 	case api.Role_BASE_PARTNER:
 		return RoleBasePartner, nil
 	default:
-		return "", Log().statusErrorf(codes.InvalidArgument, "Unknown role type %q", pbRole)
+		return "", Log().StatusErrorf(codes.InvalidArgument, "Unknown role type %q", pbRole)
 	}
 }
 
@@ -278,7 +278,7 @@ func CreateURL_FromEnvParts() (string, error) {
 	var pgUrl string = ""
 	pgHost := os.Getenv("DB_HOST")
 	if pgHost == "" {
-		return "", Log().errorf("Postgres host must be set")
+		return "", Log().Errorf("Postgres host must be set")
 	}
 	pgDriver := os.Getenv("DB_DRIVER")
 	if pgDriver == "" {
@@ -286,15 +286,15 @@ func CreateURL_FromEnvParts() (string, error) {
 	}
 	pgUser := os.Getenv("DB_USER")
 	if pgUser == "" {
-		return "", Log().errorf("Postgres user must be set")
+		return "", Log().Errorf("Postgres user must be set")
 	}
 	pgPassword := os.Getenv("DB_PASSWORD")
 	if pgPassword == "" {
-		return "", Log().errorf("Postgres password must be set")
+		return "", Log().Errorf("Postgres password must be set")
 	}
 	pgDbName := os.Getenv("DB_NAME")
 	if pgDbName == "" {
-		return "", Log().errorf("Postgres database name must be set")
+		return "", Log().Errorf("Postgres database name must be set")
 	}
 	pgPort := os.Getenv("DB_PORT")
 	if pgPort == "" {
@@ -308,7 +308,7 @@ func CreateURL_FromEnvParts() (string, error) {
 		pgDbName,
 	)
 
-	Log().format("Postgres URL: %s\n", pgUrl)
+	Log().Format("Postgres URL: %s\n", pgUrl)
 
 	return pgUrl, nil
 }

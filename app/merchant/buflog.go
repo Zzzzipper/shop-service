@@ -20,25 +20,28 @@ const (
 	logBufSize = 30
 )
 
+////
+// LogLine
+//
 type LogLine struct {
-	Code   uint32    `json:"code"`
-	Line   string    `json:"line"`
-	Time   time.Time `json:"createdSince"`
-	Source string    `json:"source"`
+	Code   uint32    `json:"code"`         // Sysytem error code
+	Line   string    `json:"line"`         // Message
+	Time   time.Time `json:"createdSince"` // Time created
+	Source string    `json:"source"`       // Log source
 }
 
 type BufLogContainer struct {
-	buffer       []LogLine
-	remote       bool
-	url          string
-	source       string
-	mu           *sync.RWMutex
+	buffer       []LogLine     // LogLine array
+	remote       bool          // Flag that bufer is remote
+	url          string        // Url remote buflog
+	source       string        // Log source
+	mu           *sync.RWMutex // Locker access to buffer
 	logLoadSince int
 }
 
 var container *BufLogContainer
 
-//
+////
 // New - singleton constructor
 //
 func Log() *BufLogContainer {
@@ -68,7 +71,7 @@ func Log() *BufLogContainer {
 	return container
 }
 
-//
+////
 // Send - send string line to srever
 //
 func (l *BufLogContainer) send(line LogLine) error {
@@ -107,7 +110,7 @@ func (l *BufLogContainer) send(line LogLine) error {
 	return nil
 }
 
-//
+////
 // putString - put string to buffer with control size
 //
 func (l *BufLogContainer) putString(in LogLine) {
@@ -116,7 +119,7 @@ func (l *BufLogContainer) putString(in LogLine) {
 
 	fmt.Printf("LogLine in putString: %v\n", in)
 
-	if l.len() > logBufSize {
+	if l.Len() > logBufSize {
 		l.buffer = append(l.buffer[:0], l.buffer[1:]...)
 	}
 	if l.remote {
@@ -126,10 +129,10 @@ func (l *BufLogContainer) putString(in LogLine) {
 	}
 }
 
-//
+////
 // format - format print output
 //
-func (l *BufLogContainer) format(format string, a ...any) {
+func (l *BufLogContainer) Format(format string, a ...any) {
 	l.putString(LogLine{
 		Line:   fmt.Sprintf(format, a...),
 		Time:   time.Now(),
@@ -137,10 +140,10 @@ func (l *BufLogContainer) format(format string, a ...any) {
 	})
 }
 
-//
+////
 // line  - unformat print output
 //
-func (l *BufLogContainer) line(a ...any) {
+func (l *BufLogContainer) Line(a ...any) {
 	l.putString(LogLine{
 		Line:   fmt.Sprintln(a...),
 		Time:   time.Now(),
@@ -148,54 +151,57 @@ func (l *BufLogContainer) line(a ...any) {
 	})
 }
 
-//
+////
 // errorf  - printf error and return it
 //
-func (l *BufLogContainer) errorf(format string, a ...any) error {
+func (l *BufLogContainer) Errorf(format string, a ...any) error {
 	l.putString(LogLine{
 		Line:   fmt.Sprintf(format, a...),
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return fmt.Errorf(format, a...)
 }
 
-//
+////
 // statusErrorf  - printf error with return code and return it
 //
-func (l *BufLogContainer) statusErrorf(code codes.Code, format string, a ...any) error {
+func (l *BufLogContainer) StatusErrorf(code codes.Code, format string, a ...any) error {
 	l.putString(LogLine{
 		Code:   uint32(code),
 		Line:   fmt.Sprintf(format, a...),
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return status.Errorf(code, format, a...)
 }
 
-//
+////
 // statusError  - printf error with return code and return it
 //
-func (l *BufLogContainer) statusError(code codes.Code, a string) error {
+func (l *BufLogContainer) StatusError(code codes.Code, a string) error {
 	l.putString(LogLine{
 		Code:   uint32(code),
 		Line:   fmt.Sprintln(a),
 		Time:   time.Now(),
 		Source: l.source,
 	})
+
 	return status.Error(code, a)
 }
 
-//
+////
 // len - length of buffer (rows number)
 //
-func (l *BufLogContainer) len() int {
+func (l *BufLogContainer) Len() int {
 	return len(l.buffer)
 }
 
-//
+////
 // body - return string slice (array)
 //
-func (l *BufLogContainer) body() *[]LogLine {
+func (l *BufLogContainer) Body() *[]LogLine {
 	return &l.buffer
 }
