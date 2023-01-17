@@ -1,0 +1,87 @@
+syntax="proto3";
+
+package shop.api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api";
+
+//
+// Shops
+//
+
+message ShopInfo {
+    // Индекс магазина
+    uint64 ShopId = 1; 
+
+    // Индекс мерчанта
+    uint64 MerchantId = 2;
+
+    // Индекс партнера
+    uint64 PartnerId = 3;
+
+    // Параметры провайдера
+    Settings Settings = 4;
+}
+
+message Settings {
+    // Наименование (тип) процессинга
+    string Processing = 1; 
+
+    // Уникальный ключ терминала
+    string Terminal = 2;
+
+    // Код валюты ISO 4217
+    string currency = 3;
+
+    // Терминал распечатывает текст (items обязательны)
+    bool Receipt = 4; 
+}
+
+message Shop {
+    // Индекс магазина в shop-service
+    uint64 id = 1;
+
+    // Время создания записи
+    google.protobuf.Timestamp create_time = 2;
+
+    // Полное наименование
+    string full_name = 3;
+
+    // URL площадки
+    string url = 4;
+
+    // Индекс мерчанта
+    uint64 merchant_id = 5;
+
+    // Логин
+    string login = 6;
+
+    // Пароль для авторизации
+    string password = 7;
+
+    // Параметры провайдера
+    Settings settings = 8; 
+}
+
+message AddShopRequest {
+    // Полное наименование
+    string full_name = 1;
+
+    // URL площадки
+    string url = 2;
+
+    // Индекс мерчанта
+    uint64 merchant_id = 3;
+
+    // Логин
+    string login = 4;
+
+    // Пароль для авторизации
+    string password = 5;
+
+    // Параметры провайдера
+    Settings settings = 8; 
+
+}
+

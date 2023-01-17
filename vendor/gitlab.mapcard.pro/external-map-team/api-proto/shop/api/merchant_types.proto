@@ -1,0 +1,42 @@
+syntax="proto3";
+
+package shop.api;
+
+import "google/protobuf/timestamp.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api";
+
+//
+// Merchants
+//
+
+message Merchant {
+    // Индекс мерчанта
+    uint64 id = 1;
+
+    // Время создания записи
+    google.protobuf.Timestamp create_time = 2;
+
+    // Полное наименование
+    string full_name = 3;
+
+    // URL площадки
+    string url = 4;
+
+    // Индекс партнера-владельца
+    uint64 partner_id = 5;
+}
+
+message AddMerchantRequest {
+    // Полное наименование
+    string full_name = 1;
+
+    // URL площадки
+    string url = 2;
+
+    // Индекс партнера-владельца
+    uint64 partner_id = 3;
+}
+

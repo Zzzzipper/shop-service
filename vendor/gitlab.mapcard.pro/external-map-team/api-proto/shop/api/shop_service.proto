@@ -1,0 +1,21 @@
+syntax="proto3";
+
+package shop.api;
+
+import "shop/api/partner_types.proto";
+import "shop/api/merchant_types.proto";
+import "shop/api/shop_types.proto";
+import "shop/api/auth_types.proto";
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api";
+
+service ShopService {
+    rpc AddPartner(AddPartnerRequest) returns (Partner) {}
+    rpc AddMerchant(AddMerchantRequest) returns (Merchant) {}
+    rpc AddShop(AddShopRequest) returns (Shop) {}
+    rpc Auth(AuthRequest) returns (ShopInfo) {}
+}
+
+
+
+

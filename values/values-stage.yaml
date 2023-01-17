@@ -1,4 +1,4 @@
-  # Default values for merchants-api.
+  # Default values for shops-api.
   # This is a YAML-formatted file.
   # Declare variables to be passed into your templates.
 nameOverride: ""
@@ -6,7 +6,7 @@ fullnameOverride: ""
 replicaCount: 1
 workloadEnvironment: "stage"
 image:
-  repository: "registry.mapcard.pro/stage/merchants-api-stage"
+  repository: "registry.mapcard.pro/stage/shops-api-stage"
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -69,7 +69,7 @@ ingress:
   hosts:
     - host: api-rest-stage.mapcard.pro
       paths:
-        - path: /api/merchant/?(.*)
+        - path: /api/shop/?(.*)
           pathType: Prefix
           servicePort: 8080
   tls:
@@ -106,16 +106,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-envConfig:
-  API_SECRET: "98hbun98h"
-  PORT: "8080"
-  DB_HOST: "10.20.0.100"
-  DB_DRIVER: "postgres"
-  DB_USER: "merchant_user"
-  DB_PASSWORD: "gkLks6AABKcIrivF"
-  DB_NAME: "merchant"
-  DB_PORT: "5432"
-  LOGBUFF_URL: "http://payments-api:9000/api/v1/log"
-  LOG_SOURCE: "MERCHANT"
-

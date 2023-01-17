@@ -1,0 +1,16 @@
+syntax="proto3";
+
+package shop.api;
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api";
+
+message AuthRequest {
+    // Логин
+    string login = 1;
+
+    // Пароль авторизации
+    string password = 2;
+
+    // Токен доступа
+    string token = 3;
+}

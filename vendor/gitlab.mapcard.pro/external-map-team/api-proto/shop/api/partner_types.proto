@@ -1,0 +1,49 @@
+syntax="proto3";
+
+package shop.api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api";
+
+//
+// Partners
+// 
+enum Role {
+    BASE_PARTNER = 0;
+    PARTNER = 1;
+    ADMIN = 2;
+    GUEST = 3;
+}
+
+message Partner {
+    // Индекс партнера
+    uint64 id = 1;
+
+    // Время создания записи
+	google.protobuf.Timestamp create_time = 2;
+
+    // Полное наименование 
+	string full_name = 3;
+
+    // URL площадки
+    string url = 4;
+
+    // Токен для доступа (резерв)
+	string api_token = 5; 
+
+    // Роль
+	Role role = 6;
+}
+
+message AddPartnerRequest {
+    // Полное наименование
+    string full_name = 1;
+
+    // URL площадки
+    string url = 2;
+
+    // Роль
+    Role role = 3;
+}
+
