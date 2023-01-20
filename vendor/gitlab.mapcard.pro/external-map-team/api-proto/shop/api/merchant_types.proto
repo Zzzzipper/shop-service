@@ -40,3 +40,17 @@ message AddMerchantRequest {
     uint64 partner_id = 3;
 }
 
+message AddMerchantResponse {
+    // Статус операции: true/false
+    bool Status = 1; 
+
+    // Текстовый код ошибки
+    string ErrCode = 2;
+
+    // Описание ошибки.
+    string ErrMessage = 3;
+
+    // Объект мерчант
+    Merchant Merchant = 4;
+}
+

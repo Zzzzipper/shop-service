@@ -10,20 +10,6 @@ option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/shop/api;api
 // Shops
 //
 
-message ShopInfo {
-    // Индекс магазина
-    uint64 ShopId = 1; 
-
-    // Индекс мерчанта
-    uint64 MerchantId = 2;
-
-    // Индекс партнера
-    uint64 PartnerId = 3;
-
-    // Параметры провайдера
-    Settings Settings = 4;
-}
-
 message Settings {
     // Наименование (тип) процессинга
     string Processing = 1; 
@@ -82,6 +68,19 @@ message AddShopRequest {
 
     // Параметры провайдера
     Settings settings = 8; 
+}
 
+message AddShopResponse {
+    // Статус операции: true/false
+    bool Status = 1; 
+
+    // Текстовый код ошибки
+    string ErrCode = 2;
+
+    // Описание ошибки.
+    string ErrMessage = 3;
+
+    // Объект магазин
+    Shop Shop = 4;
 }
 

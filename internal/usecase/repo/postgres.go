@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"gitlab.mapcard.pro/external-map-team/shop-service/pkg/custom_error"
 	"gitlab.mapcard.pro/external-map-team/shop-service/pkg/logger"
 	"gitlab.mapcard.pro/external-map-team/shop-service/pkg/metrics"
 	"gorm.io/gorm"
@@ -90,11 +91,16 @@ func (r *ShopRepo) SelectAuth(ctx context.Context, login, password string) (*ent
 	var shopInfo entity.ShopInfo
 
 	err := r.DB.Transaction(func(tx *gorm.DB) error {
-		return r.DB.
+		var count int64
+		err := r.DB.
 			Select(`p.id as partner_id, m.id as merchant_id, s.id as shop_id, s.settings as settings`).
 			Table(`shop s, merchant m, partner p`).
 			Where(`s.merchant_id=m.id AND m.partner_id=p.id AND s.login=? AND s.password=?`, login, password).
-			Find(&shopInfo).Error
+			Find(&shopInfo).Count(&count).Error
+		if count == 0 {
+			return custom_error.New("INVALID_CREDENTIALS", "Профиль не найден")
+		}
+		return err
 	})
 
 	if err != nil {

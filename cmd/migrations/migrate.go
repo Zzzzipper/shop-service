@@ -22,12 +22,12 @@ func main() {
 	}
 
 	url := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
-		cfg.User,
-		cfg.Password,
-		cfg.Host,
-		cfg.Port,
-		cfg.DbName,
-		cfg.SSLMode)
+		cfg.Postgres.User,
+		cfg.Postgres.Password,
+		cfg.Postgres.Host,
+		cfg.Postgres.Port,
+		cfg.Postgres.DbName,
+		cfg.Postgres.SSLMode)
 
 	db, err := sql.Open("postgres", url)
 

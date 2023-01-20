@@ -22,10 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShopServiceClient interface {
-	AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*Partner, error)
-	AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*Merchant, error)
-	AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error)
-	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*ShopInfo, error)
+	AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*AddPartnerResponse, error)
+	AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*AddMerchantResponse, error)
+	AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*AddShopResponse, error)
+	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 }
 
 type shopServiceClient struct {
@@ -36,8 +36,8 @@ func NewShopServiceClient(cc grpc.ClientConnInterface) ShopServiceClient {
 	return &shopServiceClient{cc}
 }
 
-func (c *shopServiceClient) AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*Partner, error) {
-	out := new(Partner)
+func (c *shopServiceClient) AddPartner(ctx context.Context, in *AddPartnerRequest, opts ...grpc.CallOption) (*AddPartnerResponse, error) {
+	out := new(AddPartnerResponse)
 	err := c.cc.Invoke(ctx, "/shop.api.ShopService/AddPartner", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -45,8 +45,8 @@ func (c *shopServiceClient) AddPartner(ctx context.Context, in *AddPartnerReques
 	return out, nil
 }
 
-func (c *shopServiceClient) AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*Merchant, error) {
-	out := new(Merchant)
+func (c *shopServiceClient) AddMerchant(ctx context.Context, in *AddMerchantRequest, opts ...grpc.CallOption) (*AddMerchantResponse, error) {
+	out := new(AddMerchantResponse)
 	err := c.cc.Invoke(ctx, "/shop.api.ShopService/AddMerchant", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -54,8 +54,8 @@ func (c *shopServiceClient) AddMerchant(ctx context.Context, in *AddMerchantRequ
 	return out, nil
 }
 
-func (c *shopServiceClient) AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*Shop, error) {
-	out := new(Shop)
+func (c *shopServiceClient) AddShop(ctx context.Context, in *AddShopRequest, opts ...grpc.CallOption) (*AddShopResponse, error) {
+	out := new(AddShopResponse)
 	err := c.cc.Invoke(ctx, "/shop.api.ShopService/AddShop", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +63,8 @@ func (c *shopServiceClient) AddShop(ctx context.Context, in *AddShopRequest, opt
 	return out, nil
 }
 
-func (c *shopServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*ShopInfo, error) {
-	out := new(ShopInfo)
+func (c *shopServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
+	out := new(AuthResponse)
 	err := c.cc.Invoke(ctx, "/shop.api.ShopService/Auth", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,10 +76,10 @@ func (c *shopServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...g
 // All implementations must embed UnimplementedShopServiceServer
 // for forward compatibility
 type ShopServiceServer interface {
-	AddPartner(context.Context, *AddPartnerRequest) (*Partner, error)
-	AddMerchant(context.Context, *AddMerchantRequest) (*Merchant, error)
-	AddShop(context.Context, *AddShopRequest) (*Shop, error)
-	Auth(context.Context, *AuthRequest) (*ShopInfo, error)
+	AddPartner(context.Context, *AddPartnerRequest) (*AddPartnerResponse, error)
+	AddMerchant(context.Context, *AddMerchantRequest) (*AddMerchantResponse, error)
+	AddShop(context.Context, *AddShopRequest) (*AddShopResponse, error)
+	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 	mustEmbedUnimplementedShopServiceServer()
 }
 
@@ -87,16 +87,16 @@ type ShopServiceServer interface {
 type UnimplementedShopServiceServer struct {
 }
 
-func (UnimplementedShopServiceServer) AddPartner(context.Context, *AddPartnerRequest) (*Partner, error) {
+func (UnimplementedShopServiceServer) AddPartner(context.Context, *AddPartnerRequest) (*AddPartnerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPartner not implemented")
 }
-func (UnimplementedShopServiceServer) AddMerchant(context.Context, *AddMerchantRequest) (*Merchant, error) {
+func (UnimplementedShopServiceServer) AddMerchant(context.Context, *AddMerchantRequest) (*AddMerchantResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddMerchant not implemented")
 }
-func (UnimplementedShopServiceServer) AddShop(context.Context, *AddShopRequest) (*Shop, error) {
+func (UnimplementedShopServiceServer) AddShop(context.Context, *AddShopRequest) (*AddShopResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddShop not implemented")
 }
-func (UnimplementedShopServiceServer) Auth(context.Context, *AuthRequest) (*ShopInfo, error) {
+func (UnimplementedShopServiceServer) Auth(context.Context, *AuthRequest) (*AuthResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
 }
 func (UnimplementedShopServiceServer) mustEmbedUnimplementedShopServiceServer() {}
